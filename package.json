@@ -1,0 +1,10 @@
+{
+  "name": "mon-projet-root",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Outillage racine du monorepo (commitlint, etc.)",
+  "devDependencies": {
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0"
+  }
+}

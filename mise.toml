@@ -1,0 +1,70 @@
+[settings]
+node.gpg_verify = false  # contournement bug local gpg <-> sqlite3 (symbol lookup error)
+
+[tools]
+node = "22"
+python = "3.12"
+lefthook = "latest"
+
+[env]
+_.file = ".env"
+
+[tasks.prepare]
+description = "Installe les git hooks (lefthook) — à lancer après mise install"
+run = "lefthook install"
+
+[tasks.setup]
+description = "Installe les dépendances front et back, puis les git hooks"
+depends = ["prepare"]
+run = [
+  "cd backend && npm install",
+  "cd frontend && npm install",
+  "npm install",
+]
+
+[tasks.dev-back]
+description = "Lance le backend NestJS en mode dev"
+dir = "backend"
+run = "npm run start:dev"
+
+[tasks.dev-front]
+description = "Lance le frontend Angular en mode dev"
+dir = "frontend"
+run = "npm start"
+
+[tasks.docker-up]
+description = "Démarre l'infra (MinIO, Postgres, Redis...)"
+run = "docker compose up -d"
+
+[tasks.docker-down]
+description = "Stoppe l'infra"
+run = "docker compose down"
+
+[tasks.dev]
+description = "Lance toute la stack de dev"
+depends = ["docker-up"]
+run = [
+  "mise run dev-back &",
+  "mise run dev-front &",
+  "wait",
+]
+
+[tasks.test]
+description = "Lance les tests backend"
+dir = "backend"
+run = "npm run test"
+
+[tasks.lint]
+description = "Lint front et back"
+run = [
+  "cd backend && npm run lint",
+  "cd frontend && npm run lint",
+]
+
+[tasks.docs]
+description = "Sert la doc mkdocs en local"
+run = "mkdocs serve"
+
+[tasks.docs-build]
+description = "Build la doc mkdocs"
+run = "mkdocs build"

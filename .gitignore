@@ -1,0 +1,106 @@
+# =========================================
+# Dépendances
+# =========================================
+node_modules/
+**/node_modules/
+jspm_packages/
+
+# =========================================
+# Variables d'environnement
+# =========================================
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# =========================================
+# Builds / outputs
+# =========================================
+dist/
+build/
+out-tsc/
+**/dist/
+**/build/
+**/out-tsc/
+.angular/
+.nest/
+*.tsbuildinfo
+
+# =========================================
+# Tests / coverage
+# =========================================
+coverage/
+**/coverage/
+.nyc_output/
+**/.nyc_output/
+
+# =========================================
+# Logs
+# =========================================
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+logs/
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# =========================================
+# Runtime / cache
+# =========================================
+pids
+*.pid
+*.seed
+*.pid.lock
+.eslintcache
+.temp/
+.tmp/
+
+# =========================================
+# mise
+# =========================================
+.mise/
+.mise.local.toml
+
+# =========================================
+# Docker
+# =========================================
+docker-compose.override.yml
+
+# =========================================
+# Prisma (DB locale éventuelle)
+# =========================================
+**/prisma/*.db
+**/prisma/*.db-journal
+
+# =========================================
+# IDE / éditeurs
+# =========================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+!.vscode/launch.json
+!.vscode/tasks.json
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.swp
+*.swo
+
+# =========================================
+# OS
+# =========================================
+.DS_Store
+Thumbs.db
+
+# =========================================
+# mkdocs
+# =========================================
+site/
