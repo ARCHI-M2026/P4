@@ -1,0 +1,63 @@
+name: datashare
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: datashare-minio
+    ports:
+      - "9000:9000"   # API S3
+      - "9001:9001"   # Console web MinIO
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    command: server /data --console-address ":9001"
+    volumes:
+      - datashare-minio-data:/data
+    networks:
+      - datashare-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: datashare-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME:-file-transfer}
+    networks:
+      - datashare-net
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD &&
+      mc mb --ignore-existing local/$$MINIO_BUCKET_NAME &&
+      echo 'Bucket \"'$$MINIO_BUCKET_NAME'\" prêt.'
+      "
+
+  redis:
+    image: redis:7-alpine
+    container_name: datashare-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - datashare-redis-data:/data
+    networks:
+      - datashare-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  datashare-net:
+
+
+volumes:
+  datashare-minio-data:
+  datashare-redis-data:
