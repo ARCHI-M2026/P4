@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/_generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @db.VarChar(64)
+  createdAt    DateTime @default(now())
+
+  files File[]
+
+  @@map("users")
+}
+
+model File {
+  id            String   @id @default(uuid())
+
+  // --- Stockage MinIO ---
+  objectKey     String   @unique    // clé de l'objet dans le bucket MinIO
+  originalName  String              // nom du fichier tel qu'uploadé
+  mimeType      String
+  size          Int                 // taille en octets (max 1 Go = 1_073_741_824)
+
+  // --- Partage / téléchargement ---
+  downloadToken String   @unique @default(uuid()) // identifiant non prédictible du lien
+  passwordHash  String?            // optionnel (US01) : hash si le fichier est protégé
+
+  // --- Cycle de vie ---
+  uploadedAt    DateTime @default(now())
+  expiresAt     DateTime           // bornée entre 1 et 7 jours après uploadedAt (validé côté service)
+
+  // --- Propriétaire ---
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([userId])
+  @@map("files")
+}

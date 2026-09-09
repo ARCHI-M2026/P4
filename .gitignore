@@ -75,6 +75,7 @@ docker-compose.override.yml
 # =========================================
 **/prisma/*.db
 **/prisma/*.db-journal
+**/_generated/
 
 # =========================================
 # IDE / éditeurs
