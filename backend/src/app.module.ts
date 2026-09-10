@@ -5,9 +5,10 @@ import { PrismaModule } from "./_prisma/prisma.module";
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { StorageModule } from './storage/storage.module';
+import { QueueModule } from './queue/queue.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, FileModule, StorageModule],
+  imports: [PrismaModule, AuthModule, FileModule, StorageModule, QueueModule],
   controllers: [AppController],
   providers: [AppService],
 })
