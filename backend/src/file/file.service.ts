@@ -70,6 +70,27 @@ export class FileService {
     });
   }
 
+  async findAllForUser(userId: string): Promise<FileResponseDto[]> {
+    const files = await this.prisma.file.findMany({
+      where: { userId },
+      orderBy: { uploadedAt: "desc" },
+    });
+ 
+    return files.map(
+      (f) =>
+        new FileResponseDto({
+          id: f.id,
+          originalName: f.originalName,
+          mimeType: f.mimeType,
+          size: f.size,
+          uploadedAt: f.uploadedAt,
+          expiresAt: f.expiresAt,
+          downloadToken: f.downloadToken,
+          isPasswordProtected: !!f.passwordHash,
+        }),
+    );
+  }
+
   async remove(fileId: string, userId: string): Promise<void> {
     const file = await this.prisma.file.findUnique({ where: { id: fileId } });
  
