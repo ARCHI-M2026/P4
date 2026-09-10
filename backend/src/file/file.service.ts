@@ -6,20 +6,27 @@ import { PrismaService } from "../_prisma/prisma.service";
 import { UploadFileDto } from "./dto/upload-file.dto";
 import { FileResponseDto } from "./dto/file-response.dto";
 
+import { StorageService } from 'src/storage/storage.service';
+
 @Injectable()
 export class FileService {
   private readonly logger = new Logger(FileService.name)
 
-  constructor(private readonly prisma: PrismaService){}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly storage: StorageService
+  ){}
 
   async upload(
     file: Express.Multer.File,
     dto: UploadFileDto,
-    userId: number
+    userId: string
   ): Promise<FileResponseDto> {
 
     // File name in minIO
     const objectKey = `${userId}/${randomBytes(16).toString("hex")}-${file.originalname}`;
+
+    await this.storage.upload(objectKey, file.buffer, file.mimetype);
 
     const expiresInDays = dto.expiresInDays ?? parseInt(process.env.DEFAULT_EXPIRATION_DAYS ?? "7");
     const expiresAt = new Date();
