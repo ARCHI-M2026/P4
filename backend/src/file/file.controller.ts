@@ -40,6 +40,6 @@ export class FileController {
     if (process.env.NODE_ENV === "production") {
       throw new ForbiddenException("Endpoint disponible uniquement en dev");
     }
-    await this.fileService.forceExpire(id, req.user.id);
+    await this.fileService.forceExpire(id, req.user.id); 
   }
 }

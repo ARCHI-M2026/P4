@@ -1,9 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { Job } from "bullmq";
-import { FileProcessor} from "./file.processor";
+import { FileProcessor } from "./file.processor";
+import { DeleteFileJobData } from "./interface/delete-file-job-data.interface";
 import { PrismaService } from "../_prisma/prisma.service";
 import { StorageService } from "../storage/storage.service";
-import { DeleteFileJobData } from "./interface/delete-file-job-data.interface";
 
 describe("FileProcessor", () => {
   let processor: FileProcessor;
