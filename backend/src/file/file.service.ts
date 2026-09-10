@@ -114,4 +114,31 @@ export class FileService {
  
     this.logger.log(`File deleted: ${fileId} (user: ${userId})`);
   }
+
+  /**
+   * DEV ONLY — force l'exécution immédiate du job d'expiration,
+   * sans attendre le délai programmé. Utile pour tester la suppression
+   * automatique sans patienter jusqu'à 7 jours.
+   */
+  async forceExpire(fileId: string, userId: string): Promise<void> {
+    const file = await this.prisma.file.findUnique({ where: { id: fileId } });
+ 
+    if (!file) {
+      throw new NotFoundException("File not found");
+    }
+ 
+    if (file.userId !== userId) {
+      throw new ForbiddenException("You are not the owner of this file");
+    }
+ 
+    const job = await this.expirationQueue.getJob(fileId);
+ 
+    if (!job) {
+      throw new NotFoundException("No expiration job found for this file");
+    }
+ 
+    await job.promote();
+    this.logger.warn(`[DEV] Expiration forcée pour le fichier: ${fileId}`);
+  }
 }
+
