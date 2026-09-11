@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile, UseInterceptors, Request, Body, HttpCode, HttpStatus, Param, ForbiddenException, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Delete, UploadedFile, UseInterceptors, Request, Body, HttpCode, HttpStatus, Param, ForbiddenException, UseGuards } from '@nestjs/common';
 
 import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from 'multer';
@@ -33,6 +33,22 @@ export class FileController {
     return this.fileService.upload(file, dto, req.user.id);
   }
 
+  @Get()
+  async findAll(@Request() req: { user: JwtPayload }): Promise<FileResponseDto[]> {
+    return this.fileService.findAllForUser(req.user.id);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(
+    @Param('id') id: string,
+    @Request() req: { user: JwtPayload },
+  ): Promise<void> {
+    await this.fileService.remove(id, req.user.id);
+  }
+
+
+  // TODO - partie dev pour tester une suppression de fichier via postman
   @Post(":id/force-expire")
   @HttpCode(HttpStatus.NO_CONTENT)
   async forceExpire(
@@ -42,6 +58,6 @@ export class FileController {
     if (process.env.NODE_ENV === "production") {
       throw new ForbiddenException("Endpoint disponible uniquement en dev");
     }
-    await this.fileService.forceExpire(id, req.user.id); 
+    await this.fileService.forceExpire(id, req.user.id);
   }
 }

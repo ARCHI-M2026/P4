@@ -29,7 +29,7 @@ export class FileService {
     userId: string
   ): Promise<FileResponseDto> {
 
-    // TODO Validarion chiffre magique
+    // TODO Validation chiffre magique
     // File name in minIO
     const objectKey = `${userId}/${randomBytes(16).toString("hex")}-${file.originalname}`;
 
