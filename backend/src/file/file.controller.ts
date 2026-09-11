@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile, UseInterceptors, Request, Body, HttpCode, HttpStatus, Param, ForbiddenException } from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseInterceptors, Request, Body, HttpCode, HttpStatus, Param, ForbiddenException, UseGuards } from '@nestjs/common';
 
 import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from 'multer';
@@ -7,12 +7,14 @@ import { FileService } from './file.service';
 import { UploadFileDto } from "./dto/upload-file.dto";
 import { FileResponseDto } from "./dto/file-response.dto";
 
+import { JwtAuthGuard } from 'src/auth/jwt-guard';
 import { JwtPayload } from 'src/auth/interface/jwt-payload.interface'
 
 
 const MAX_FILE_SIZE_BYTES = 1024 * 1024 * 1024;
 
 @Controller('file')
+@UseGuards(JwtAuthGuard)
 export class FileController {
   constructor(private readonly fileService: FileService) { }
 
