@@ -11,6 +11,7 @@ import { FileResponseDto } from "./dto/file-response.dto";
 
 import { StorageService } from 'src/storage/storage.service';
 import { DeleteFileJobData } from './interface/delete-file-job-data.interface';
+import { validateFileMagicNumber } from './utils/file-validation.util';
 
 @Injectable()
 export class FileService {
@@ -29,7 +30,9 @@ export class FileService {
     userId: string
   ): Promise<FileResponseDto> {
 
-    // TODO Validarion chiffre magique
+    // Magique number validation
+    await validateFileMagicNumber(file.buffer);
+
     // File name in minIO
     const objectKey = `${userId}/${randomBytes(16).toString("hex")}-${file.originalname}`;
 
