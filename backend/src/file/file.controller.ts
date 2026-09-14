@@ -7,8 +7,8 @@ import { FileService } from './file.service';
 import { UploadFileDto } from "./dto/upload-file.dto";
 import { FileResponseDto } from "./dto/file-response.dto";
 
-import { JwtAuthGuard } from 'src/auth/jwt-guard';
-import { JwtPayload } from 'src/auth/interface/jwt-payload.interface'
+import { JwtAuthGuard } from '../auth/jwt-guard';
+import { JwtPayload } from '../auth/interface/jwt-payload.interface'
 
 
 const MAX_FILE_SIZE_BYTES = 1024 * 1024 * 1024;
