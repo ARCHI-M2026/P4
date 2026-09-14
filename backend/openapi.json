@@ -1,0 +1,518 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Connexion réussie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "access_token": {
+                      "type": "string",
+                      "description": "Token JWT"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email ou mot de passe incorrect"
+          }
+        },
+        "summary": "Se connecter et obtenir un token JWT",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Compte créé avec succès"
+          },
+          "400": {
+            "description": "Email invalide ou mot de passe trop court"
+          },
+          "401": {
+            "description": "Un compte existe déjà avec cet email"
+          }
+        },
+        "summary": "Créer un compte utilisateur",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/file": {
+      "post": {
+        "operationId": "FileController_upload",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "expiresInDays": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 7,
+                    "example": 7
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 6,
+                    "example": "secret123"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Fichier uploadé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Fichier de type dangereux, expiration ou mot de passe invalide"
+          },
+          "401": {
+            "description": "Token manquant ou invalide"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Uploader un fichier (max 1 Go)",
+        "tags": [
+          "file"
+        ]
+      },
+      "get": {
+        "operationId": "FileController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des fichiers de l'utilisateur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token manquant ou invalide"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Consulter l'historique des fichiers de l'utilisateur connecté",
+        "tags": [
+          "file"
+        ]
+      }
+    },
+    "/file/{id}": {
+      "delete": {
+        "operationId": "FileController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Identifiant du fichier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Fichier supprimé avec succès"
+          },
+          "401": {
+            "description": "Token manquant ou invalide"
+          },
+          "403": {
+            "description": "L'utilisateur n'est pas propriétaire du fichier"
+          },
+          "404": {
+            "description": "Fichier introuvable"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Supprimer manuellement un fichier",
+        "tags": [
+          "file"
+        ]
+      }
+    },
+    "/file/{id}/force-expire": {
+      "post": {
+        "description": "Indisponible en production.",
+        "operationId": "FileController_forceExpire",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Identifiant du fichier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Expiration déclenchée avec succès"
+          },
+          "401": {
+            "description": "Token manquant ou invalide"
+          },
+          "403": {
+            "description": "Pas propriétaire, ou endpoint désactivé en production"
+          },
+          "404": {
+            "description": "Fichier ou job d'expiration introuvable"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "[DEV] Forcer l'expiration immédiate d'un fichier",
+        "tags": [
+          "file"
+        ]
+      }
+    },
+    "/download/{token}": {
+      "get": {
+        "operationId": "DownloadController_getMetadata",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "description": "Token de téléchargement (contenu dans le lien partagé)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadMetadataResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Lien invalide"
+          },
+          "410": {
+            "description": "Le lien a expiré"
+          }
+        },
+        "summary": "Consulter les métadonnées d'un fichier avant téléchargement (accès public)",
+        "tags": [
+          "download"
+        ]
+      },
+      "post": {
+        "operationId": "DownloadController_download",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "description": "Token de téléchargement (contenu dans le lien partagé)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadUrlResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Mot de passe requis mais non fourni"
+          },
+          "401": {
+            "description": "Mot de passe incorrect"
+          },
+          "404": {
+            "description": "Lien invalide"
+          },
+          "410": {
+            "description": "Le lien a expiré"
+          }
+        },
+        "summary": "Obtenir l'URL de téléchargement (accès public, mot de passe si requis)",
+        "tags": [
+          "download"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "DataShare API",
+    "description": "API de transfert de fichiers avec liens temporaires, protection par mot de passe et expiration automatique.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "access-token": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "utilisateur@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123",
+            "minLength": 8
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "utilisateur@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123",
+            "minLength": 8
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "FileResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "30c479e1-7cff-4f1e-9784-db0c37da138b"
+          },
+          "originalName": {
+            "type": "string",
+            "example": "rapport.pdf"
+          },
+          "mimeType": {
+            "type": "string",
+            "example": "application/pdf"
+          },
+          "size": {
+            "type": "number",
+            "description": "Taille du fichier en octets",
+            "example": 102400
+          },
+          "uploadedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "downloadToken": {
+            "type": "string",
+            "description": "Identifiant unique utilisé dans le lien de téléchargement public",
+            "example": "252edb8e-7ad3-492d-84db-ded2b9ec52a0"
+          },
+          "isPasswordProtected": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "id",
+          "originalName",
+          "mimeType",
+          "size",
+          "uploadedAt",
+          "expiresAt",
+          "downloadToken",
+          "isPasswordProtected"
+        ]
+      },
+      "DownloadMetadataResponseDto": {
+        "type": "object",
+        "properties": {
+          "originalName": {
+            "type": "string",
+            "example": "rapport.pdf"
+          },
+          "mimeType": {
+            "type": "string",
+            "example": "application/pdf"
+          },
+          "size": {
+            "type": "number",
+            "description": "Taille du fichier en octets",
+            "example": 102400
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "isPasswordProtected": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "originalName",
+          "mimeType",
+          "size",
+          "expiresAt",
+          "isPasswordProtected"
+        ]
+      },
+      "DownloadRequestDto": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "Mot de passe requis si le fichier est protégé.",
+            "example": "secret123"
+          }
+        }
+      },
+      "DownloadUrlResponseDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL presignée MinIO pour télécharger le fichier directement."
+          },
+          "expiresIn": {
+            "type": "number",
+            "description": "Durée de validité de l'URL, en secondes.",
+            "example": 300
+          }
+        },
+        "required": [
+          "url",
+          "expiresIn"
+        ]
+      }
+    }
+  }
+}
