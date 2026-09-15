@@ -11,11 +11,16 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly url = environment.urlAPIAuth
+  private readonly urlLogin = environment.urlAPIAuth
+  private readonly urlRegister = environment.urlAPIRegister
 
   private http = inject(HttpClient);
 
   login(credentials: ICredentials): Observable<IToken> {
-    return this.http.post<IToken>(this.url, credentials)
+    return this.http.post<IToken>(this.urlLogin, credentials)
+  }
+
+  register(credentials: ICredentials): Observable<IToken> {
+    return this.http.post<IToken>(this.urlRegister, credentials)
   }
 }
