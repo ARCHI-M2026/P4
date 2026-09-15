@@ -25,7 +25,10 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"]
+            "styles": [
+              "src/styles.css",
+              "src/styles-form-container.css"
+            ]
           },
           "configurations": {
             "production": {
