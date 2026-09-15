@@ -9,7 +9,7 @@ import { PrismaService } from "../_prisma/prisma.service";
 import { UploadFileDto } from "./dto/upload-file.dto";
 import { FileResponseDto } from "./dto/file-response.dto";
 
-import { StorageService } from 'src/storage/storage.service';
+import { StorageService } from '../storage/storage.service';
 import { DeleteFileJobData } from './interface/delete-file-job-data.interface';
 import { validateFileMagicNumber } from './utils/file-validation.util';
 

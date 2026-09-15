@@ -1,0 +1,27 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "..",
+  "testEnvironment": "node",
+  "testRegex": ".int-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": ["ts-jest", { "tsconfig": "<rootDir>/test/tsconfig.int.json" }]
+  },
+  "transformIgnorePatterns": ["node_modules/(?!(@nestjs/bullmq|@nestjs/bull-shared|@nestjs/jwt)/)"],
+  "moduleNameMapper": {
+    "^(\\.{1,2}/.*)\\.js$": "$1"
+  },
+  "coverageDirectory": "coverage/integration",
+  "collectCoverageFrom": [
+    "src/**/*.ts",
+    "!src/**/*.spec.ts",
+    "!src/**/*.module.ts",
+    "!src/main.ts",
+    "!src/_generated/**",
+    "!src/_prisma/**",
+    "!src/**/*.dto.ts",
+    "!src/**/interface/**",
+    "!src/app.controller.ts",
+    "!src/app.service.ts"
+  ],
+  "coverageProvider": "v8"
+}

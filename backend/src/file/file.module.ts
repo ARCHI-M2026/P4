@@ -4,8 +4,8 @@ import { BullModule } from "@nestjs/bullmq";
 import { FileController } from './file.controller';
 import { FileService } from './file.service';
 import { FileProcessor } from "./file.processor";
-import { StorageModule } from 'src/storage/storage.module';
-import { PrismaModule } from 'src/_prisma/prisma.module';
+import { StorageModule } from '../storage/storage.module';
+import { PrismaModule } from '../_prisma/prisma.module';
 
 @Module({
   imports: [PrismaModule, StorageModule, BullModule.registerQueue({ name: "file-expiration" }),],

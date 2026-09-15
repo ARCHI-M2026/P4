@@ -1,4 +1,5 @@
 import { BadRequestException } from "@nestjs/common";
+import { loadEsm } from "load-esm";
 
 /**
  * Extensions/formats dangereux à bloquer, détectés par magic number
@@ -27,7 +28,7 @@ const DANGEROUS_EXTENSIONS = new Set([
  * sans être bloqués, ce qui est le comportement attendu pour ce MVP.
  */
 export async function validateFileMagicNumber(buffer: Buffer): Promise<void> {
-  const { fileTypeFromBuffer } = await import("file-type");
+  const { fileTypeFromBuffer } = await loadEsm<typeof import("file-type")>("file-type"); //await import("file-type");
   const detected = await fileTypeFromBuffer(buffer);
 
   if (detected && DANGEROUS_EXTENSIONS.has(detected.ext)) {
