@@ -6,6 +6,7 @@ import { Router, RouterLink } from "@angular/router";
 import { AuthService } from '../../_services/auth';
 import { ICredentials } from '../../_interfaces/credentials';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TokenService } from '../../_services/token';
 
 @Component({
   selector: 'app-login.component',
@@ -18,6 +19,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class LoginComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private tokenService = inject(TokenService)
   private formBuilder = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
 
@@ -58,8 +60,7 @@ export class LoginComponent implements OnInit {
       next: (token) => {
         this.isLoading.set(false)
         this.submitted = false;
-        // Handle successful login (e.g., save token, navigate)
-        console.log(token)
+        this.tokenService.saveToken(token.access_token);
         this.router.navigate(['/']);
       },
       error: (err) => {
