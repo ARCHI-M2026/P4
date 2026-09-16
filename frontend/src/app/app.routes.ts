@@ -3,6 +3,8 @@ import { PublicLayout } from './layout/public/public';
 import { Home } from './pages/home/home';
 import { LoginComponent } from './pages/login/login';
 import { RegisterComponent } from './pages/register/register';
+import { AdminLayout } from './layout/admin/admin';
+import { FileListComponent } from './pages/files/file-list/file-list';
 
 export const routes: Routes = [
     {
@@ -12,6 +14,13 @@ export const routes: Routes = [
             { path: '', component: Home },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent }
+        ]
+    },
+    {
+        path: 'files',
+        component: AdminLayout,
+        children: [
+            { path: '', component: FileListComponent }
         ]
     }
 ];
