@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FileMetaDataResponse } from '../../../_interfaces/fileMetaData';
 import { RouterLink } from '@angular/router';
 import { DatePipe, NgClass } from '@angular/common';
@@ -23,8 +23,8 @@ export class FileListComponent implements OnInit {
   isMenuActionsOpen = false;
   openedMenuToken: string | null = null;
 
-  message: string | null = null;
-  messageType: 'success' | 'error' | null = null;  
+  message = signal<string | null>(null);
+  messageType = signal<'success' | 'error' | null>(null);
 
   ngOnInit(){
     this.fileService.getAll()
@@ -34,17 +34,18 @@ export class FileListComponent implements OnInit {
         this.filterFiles();
       },
       error: (err) => {     
-        this.message = '';
+        this.message.set('');
 
         if (err.status === 0) {
-          this.message = 'Impossible de contacter le serveur.\nVérifiez votre connexion ou réessayez plus tard.';
+          this.message.set('Impossible de contacter le serveur.\nVérifiez votre connexion ou réessayez plus tard.');
         } else if (err.status === 401) {
-          this.message = 'Veuillez vous connecter.';
+          this.message.set('Veuillez vous connecter.');
         } else {
-          this.message = 'Une erreur est survenue. Merci de réessayer.';
+          this.message.set('Une erreur est survenue. Merci de réessayer.');
         }
-        
-        this.messageType = 'error';
+
+        this.messageType.set('error');
+        console.log('message après affectation:', this.message());
       }
     });
   }

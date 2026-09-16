@@ -1,6 +1,6 @@
-@if (message) {
-<div class="alert" [ngClass]="{'alert-danger': messageType === 'error', 'alert-success': messageType === 'success'}">
-    {{ message }}
+@if (message()) {
+<div class="alert" [ngClass]="{'alert-danger': messageType() === 'error', 'alert-success': messageType() === 'success'}">
+    {{ message() }}
 </div>
 }
 
@@ -40,7 +40,7 @@
                     Téleversé le {{ fileMetaData.createdAt | date:'dd/MM/yyyy HH:mm:ss' }} -
                     Expiration saisie : {{ fileMetaData.expirationDays }} jours
                 </div>
-                <div class="file-infos-tags">{{ fileMetaData.tags?.join(', ') }}</div>
+                <div class="file-infos-tags">{{ fileMetaData.tags.join(', ') }}</div>
             </div>
         </div>
 
