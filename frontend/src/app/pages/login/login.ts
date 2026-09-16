@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
         this.isLoading.set(false)
         this.submitted = false;
         this.tokenService.saveToken(token.access_token);
-        this.router.navigate(['/']);
+        this.router.navigate(['/files']);
       },
       error: (err) => {
         this.message = '';
