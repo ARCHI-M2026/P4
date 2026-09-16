@@ -5,6 +5,7 @@ import { LoginComponent } from './pages/login/login';
 import { RegisterComponent } from './pages/register/register';
 import { AdminLayout } from './layout/admin/admin';
 import { FileListComponent } from './pages/files/file-list/file-list';
+import { authGuard } from './_helpers/auth-guard';
 
 export const routes: Routes = [
     {
@@ -20,7 +21,7 @@ export const routes: Routes = [
         path: 'files',
         component: AdminLayout,
         children: [
-            { path: '', component: FileListComponent }
+            { path: '', component: FileListComponent, canActivate: [authGuard] }
         ]
     }
 ];
