@@ -6,6 +6,7 @@ import { RegisterComponent } from './pages/register/register';
 import { AdminLayout } from './layout/admin/admin';
 import { FileListComponent } from './pages/files/file-list/file-list';
 import { authGuard } from './_helpers/auth-guard';
+import { FileUploadComponent } from './pages/files/file-upload/file-upload';
 
 export const routes: Routes = [
     {
@@ -14,7 +15,8 @@ export const routes: Routes = [
         children: [
             { path: '', component: Home },
             { path: 'login', component: LoginComponent },
-            { path: 'register', component: RegisterComponent }
+            { path: 'register', component: RegisterComponent },
+            { path: 'files/upload', component: FileUploadComponent }
         ]
     },
     {
