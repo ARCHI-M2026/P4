@@ -17,7 +17,7 @@ export const routes: Routes = [
             { path: '', component: Home },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
-            { path: 'files/upload', component: FileUploadComponent },
+            { path: 'files/upload', component: FileUploadComponent, canActivate: [authGuard] },
             { path: 'file/:id', component: FileDetailsComponent },
         ]
     },
