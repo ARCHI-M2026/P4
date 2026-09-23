@@ -7,6 +7,7 @@ import { AdminLayout } from './layout/admin/admin';
 import { FileListComponent } from './pages/files/file-list/file-list';
 import { authGuard } from './_helpers/auth-guard';
 import { FileUploadComponent } from './pages/files/file-upload/file-upload';
+import { FileDetailsComponent } from './pages/files/file-details/file-details';
 
 export const routes: Routes = [
     {
@@ -16,7 +17,8 @@ export const routes: Routes = [
             { path: '', component: Home },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
-            { path: 'files/upload', component: FileUploadComponent }
+            { path: 'files/upload', component: FileUploadComponent },
+            { path: 'file/:id', component: FileDetailsComponent },
         ]
     },
     {

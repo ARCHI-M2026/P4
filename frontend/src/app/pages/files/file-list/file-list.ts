@@ -16,9 +16,8 @@ export class FileListComponent implements OnInit {
   private fileService = inject(FileService)
 
   filter = 'valid';
-  tagFilter = '';
-  filteredFiles: FileMetaDataResponse[] = [];
-  fileMetaDatas: FileMetaDataResponse[] = [];
+  filteredFiles = signal<FileMetaDataResponse[]>([]);
+  fileMetaDatas = signal<FileMetaDataResponse[]>([]);
 
   isMenuActionsOpen = false;
   openedMenuToken: string | null = null;
@@ -26,55 +25,50 @@ export class FileListComponent implements OnInit {
   message = signal<string | null>(null);
   messageType = signal<'success' | 'error' | null>(null);
 
-  ngOnInit(){
+  ngOnInit() {
     this.fileService.getAll()
-    .subscribe({
-      next: (res: HttpResponse<FileMetaDataResponse[]>) => {        
-        this.fileMetaDatas = res.body || [];
-        this.filterFiles();
-      },
-      error: (err) => {     
-        this.message.set('');
+      .subscribe({
+        next: (res: HttpResponse<FileMetaDataResponse[]>) => {
+          console.log(res.body)
+          this.fileMetaDatas.set(res.body || []);
+          this.filterFiles();
+          console.log(this.filteredFiles());
+        },
+        error: (err) => {
+          this.message.set('');
 
-        if (err.status === 0) {
-          this.message.set('Impossible de contacter le serveur.\nVérifiez votre connexion ou réessayez plus tard.');
-        } else if (err.status === 401) {
-          this.message.set('Veuillez vous connecter.');
-        } else {
-          this.message.set('Une erreur est survenue. Merci de réessayer.');
+          if (err.status === 0) {
+            this.message.set('Impossible de contacter le serveur.\nVérifiez votre connexion ou réessayez plus tard.');
+          } else if (err.status === 401) {
+            this.message.set('Veuillez vous connecter.');
+          } else {
+            this.message.set('Une erreur est survenue. Merci de réessayer.');
+          }
+
+          this.messageType.set('error');
         }
-
-        this.messageType.set('error');
-        console.log('message après affectation:', this.message());
-      }
-    });
+      });
   }
 
 
   filterFiles() {
-    if (this.filter === 'expired') {
-      this.filteredFiles = this.fileMetaDatas.filter(f => f.isExpired);
-    } else if (this.filter === 'valid') {
-      this.filteredFiles = this.fileMetaDatas.filter(f => !f.isExpired);
-    } else {
-      this.filteredFiles = this.fileMetaDatas;
-    }
+    const now = new Date();
 
-    if (this.tagFilter) {
-      this.filteredFiles = this.filteredFiles.filter(f =>
-        f.tags?.some((tag: string) =>
-          tag.toLowerCase().includes(this.tagFilter.toLowerCase())
-        )
-      );
+    if (this.filter === 'expired') {
+      this.filteredFiles.set(this.fileMetaDatas().filter(f => new Date(f.expiresAt) <= now));
+    } else if (this.filter === 'valid') {
+      this.filteredFiles.set(this.fileMetaDatas().filter(f => new Date(f.expiresAt) > now));
+    } else {
+      this.filteredFiles.set(this.fileMetaDatas());
     }
   }
 
-  deleteFile(_token: string, _event: Event): void {    
+  deleteFile(_token: string, _event: Event): void {
     // event.preventDefault();
     // const confirmed = window.confirm('Etes vous sur de vouloir supprimer ce fichier?');
 
     // if (confirmed) {
-      
+
     //   this.fileService.delete(token)
     //     .pipe(takeUntilDestroyed(this.destroyRef))
     //     .subscribe({
@@ -101,24 +95,24 @@ export class FileListComponent implements OnInit {
   //***********************************************/
   //***********************************************/
   getExpirationLabel(isExpired: boolean, remainingDays: number): string {
-    
-    if (isExpired)      
+
+    if (isExpired)
       return 'Expiré';
-    
-    if (remainingDays === 0 && !isExpired) return 'Expire aujourd\'hui'; 
+
+    if (remainingDays === 0 && !isExpired) return 'Expire aujourd\'hui';
     if (remainingDays === 1) return 'Expire demain';
     if (remainingDays === 7) return 'Expire dans 1 semaine';
 
     return `Expire dans ${remainingDays} jours`;
   }
 
-  getExpirationClass(isExpired: boolean, remainingDays: number): string {    
-    
+  getExpirationClass(isExpired: boolean, remainingDays: number): string {
+
     if (isExpired)
       return 'expiration-text-danger';
-    
+
     if (remainingDays === 0 || remainingDays === 1) {
-        return 'expiration-text-warning';      
+      return 'expiration-text-warning';
     } else {
       return 'expiration-text-normal';
     }

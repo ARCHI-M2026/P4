@@ -1,0 +1,57 @@
+<div class="form-container">
+
+    <div class="form-title">
+        Télécharger un fichier
+    </div>
+
+    <!-- Message -->
+    @if (message()) {
+    <div class="alert"
+        [ngClass]="{'alert-danger': messageType() === 'error', 'alert-success': messageType() === 'success'}">
+        {{ message() }}
+    </div>
+    }
+
+    @if (isLoading()) {
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <p class="spinner-text">Traitement en cours, veuillez patienter...</p>
+    </div>
+    }
+
+    @if (isFileFound() && !isExpired()){
+    <div class="form-io-container">
+
+        <div class="form-io-row">
+            <div class="file-infos-icon"></div>
+            <div class="file-infos-container">
+                <div class="file-infos-name">{{ fileMetaDataResponse?.originalName }}</div>
+                <div class="file-infos-size">{{ fileMetaDataResponse?.size }}</div>
+            </div>
+        </div>
+
+        <div class="form-io-row-noWidth" [ngClass]="getExpirationClass()">
+            {{ getExpirationLabel() }}
+        </div>
+
+        @if (fileMetaDataResponse?.isPasswordProtected) {
+        <form [formGroup]="fileForm" style="width: 100%;">
+            <div class="form-io">
+                <label class="form-input-label" for="password">Mot de passe</label>
+                <input class="form-input" type="password" id="password" formControlName="password"
+                    placeholder="Saisissez le mot de passe...">
+            </div>
+        </form>
+        }
+    </div>
+
+    <div class="form-button-container">
+        <button class="form-button form-button-telecharger" (click)="downloadFile()"
+            [disabled]="isLoading()">
+            {{ isLoading() ? 'Téléchargement...' : 'Télécharger' }}
+        </button>
+    </div>
+    }
+
+    
+</div>

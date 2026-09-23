@@ -10,18 +10,36 @@ import { FileMetaDataResponse } from '../_interfaces/fileMetaData';
 })
 export class FileService {
   private readonly urlFile = environment.urlAPIFile
+  private readonly urlDownload = environment.urlAPIDownload
 
   private http = inject(HttpClient)
 
   getAll(): Observable<HttpResponse<FileMetaDataResponse[]>> {
-     return this.http.get<FileMetaDataResponse[]>(this.urlFile, { observe: 'response' })
+    return this.http.get<FileMetaDataResponse[]>(this.urlFile, { observe: 'response' })
   }
 
   upload(formData: FormData): Observable<HttpResponse<FileMetaDataResponse>> {
-    return this.http.post<FileMetaDataResponse>(this.urlFile, formData, { observe: 'response' })     
+    return this.http.post<FileMetaDataResponse>(this.urlFile, formData, { observe: 'response' })
+  }
+
+  findByToken(token: string): Observable<FileMetaDataResponse> {
+    return this.http.get<FileMetaDataResponse>(this.urlDownload + "/" + token);
+  }
+
+  // // TODO Signature en blob ?
+  // downloadFile(token: string, password: string): Observable<Blob> {
+  //   // const url = this.urlDownload + `/download/${token}`;
+  //   return this.http.post(this.urlDownload + "/" + token, { password }, { responseType: 'blob' });
+  // }
+
+  downloadFile(token: string, body: { password?: string }): Observable<{ url: string; expiresIn: number }> {
+    return this.http.post<{ url: string; expiresIn: number }>(
+      `${this.urlDownload}/${token}`,
+      body
+    );
   }
 
   delete(token: string): Observable<HttpResponse<void>> {
-      return this.http.delete<void>(this.urlFile + "/" + token, { observe: 'response' })
+    return this.http.delete<void>(this.urlFile + "/" + token, { observe: 'response' })
   }
 }

@@ -25,52 +25,51 @@
         </div>
     </div>
 
-    @for (fileMetaData of filteredFiles; track fileMetaData.token) {
+    @for (fileMetaData of filteredFiles(); track fileMetaData.downloadToken) {
     <div class="file-list-item">
 
         <div class="form-io-row">
             <div class="file-infos-icon"></div>
             <div class="file-infos-container">
-                <div class="file-infos-name">{{ fileMetaData.originalFileName }}</div>
-                <div class="file-infos-size"
+                <div class="file-infos-name">{{ fileMetaData.originalName }}</div>
+                <!-- <div class="file-infos-size"
                     [ngClass]="getExpirationClass(fileMetaData.isExpired, fileMetaData.remainingDays)">
                     {{ getExpirationLabel(fileMetaData.isExpired, fileMetaData.remainingDays) }}
-                </div>
+                </div> -->
                 <div class="file-infos-expiration-days">
-                    Téleversé le {{ fileMetaData.createdAt | date:'dd/MM/yyyy HH:mm:ss' }} -
-                    Expiration saisie : {{ fileMetaData.expirationDays }} jours
+                    Téleversé le {{ fileMetaData.uploadedAt | date:'dd/MM/yyyy HH:mm:ss' }} -
+                    Expiration saisie : {{ fileMetaData.expiresAt | date:'dd/MM/yyyy HH:mm:ss' }}
                 </div>
-                <div class="file-infos-tags">{{ fileMetaData.tags.join(', ') }}</div>
             </div>
         </div>
 
         <div class="file-actions">
 
-            @if (fileMetaData.isProtected) {
+            @if (fileMetaData.isPasswordProtected) {
             <div class="file-action file-lock"></div>
             }
 
             <div class="file-action file-action-container">
-                <button class="file-action-button file-action-delete" (click)="deleteFile(fileMetaData.token, $event)">
+                <button class="file-action-button file-action-delete" (click)="deleteFile(fileMetaData.downloadToken, $event)">
                     Supprimer
                 </button>
             </div>
 
             <div class="file-action file-action-container">
-                <div class="file-action-button file-action-access" [routerLink]="['/file', fileMetaData.token]">Accéder
+                <div class="file-action-button file-action-access" [routerLink]="['/file', fileMetaData.downloadToken]">Accéder
                 </div>
             </div>
 
             <!-- Actions mobile -->
             <div class="file-action-mobile-container">
-                <button class="file-action-mobile-btn" (click)="toggleMenuActionsMobile(fileMetaData.token)"
+                <button class="file-action-mobile-btn" (click)="toggleMenuActionsMobile(fileMetaData.downloadToken)"
                     aria-label="Ouvrir le menu" alt="Ouvrir le menu">
                 </button>
 
-                @if (openedMenuToken === fileMetaData.token) {
+                @if (openedMenuToken === fileMetaData.downloadToken) {
                 <div class="file-action-mobile-popup">
-                    <button (click)="deleteFile(fileMetaData.token, $event)">Supprimer</button>
-                    <a [routerLink]="['/file', fileMetaData.token]" (click)="closeMenuActionsMobile()">Accéder</a>
+                    <button (click)="deleteFile(fileMetaData.downloadToken, $event)">Supprimer</button>
+                    <a [routerLink]="['/file', fileMetaData.downloadToken]" (click)="closeMenuActionsMobile()">Accéder</a>
                 </div>
                 }
             </div>
