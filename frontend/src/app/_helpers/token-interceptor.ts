@@ -20,7 +20,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
 
     return next(newReq).pipe(
       catchError(error => {
-        if(error.status === 401){
+        if(error.status === 401 && !req.url.includes('/download')){
           tokenService.clearToken()
           router.navigate(['/login'])
         }
