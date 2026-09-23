@@ -55,6 +55,7 @@ export class DownloadService {
     const url = await this.storage.getPresignedDownloadUrl(
       file.objectKey,
       PRESIGNED_URL_TTL_SECONDS,
+      file.originalName
     );
 
     this.logger.log(`URL de téléchargement générée pour: ${file.id}`);
