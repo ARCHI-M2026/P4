@@ -29,22 +29,6 @@ export class FileDetailsComponent implements OnInit {
   isLoading = signal(false);
   isFileFound = signal(false)
 
-  //   expiresAt
-  // : 
-  // "2026-09-24T07:19:24.123Z"
-  // isPasswordProtected
-  // : 
-  // true
-  // mimeType
-  // : 
-  // "application/pdf"
-  // originalName
-  // : 
-  // "Cours reÄseau avanceÄ - NAT.pdf"
-  // size
-  // : 
-  // 5171342
-
   ngOnInit() {
     this.fileToken = String(this.route.snapshot.paramMap.get('id'));
 
@@ -111,40 +95,6 @@ export class FileDetailsComponent implements OnInit {
           this.messageType.set('error');
         }
       })
-
-    // this.fileService.downloadFile(token, this.fileForm.value)
-    //   .pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe({
-    //     next: (blob: Blob) => {
-    //       const downloadUrl = window.URL.createObjectURL(blob);
-
-    //       const link = document.createElement('a');
-    //       link.href = downloadUrl;
-    //       link.download = this.fileMetaDataResponse?.originalName || 'downloaded_file';
-
-    //       document.body.appendChild(link);
-    //       link.click();
-    //       link.remove();
-    //       window.URL.revokeObjectURL(downloadUrl);
-
-    //       this.isLoading.set(false);
-    //       this.message.set('Fichier correctement téléchargé !');
-    //       this.messageType.set('success');
-    //     },
-    //     error: (err) => {
-    //       this.isLoading.set(false);
-    //       this.messageType.set('error');
-
-    //       err.error.text().then((text: string) => {
-    //         try {
-    //           const errorObj = JSON.parse(text);
-    //           this.message.set(errorObj.message);
-    //         } catch {
-    //           this.message.set('Erreur inattendue, impossible de lire le JSON');
-    //         }
-    //       });
-    //     }
-    //   });
   }
 
   /***************************************************************/
