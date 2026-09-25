@@ -26,12 +26,6 @@ export class FileService {
     return this.http.get<FileMetaDataResponse>(this.urlDownload + "/" + token);
   }
 
-  // // TODO Signature en blob ?
-  // downloadFile(token: string, password: string): Observable<Blob> {
-  //   // const url = this.urlDownload + `/download/${token}`;
-  //   return this.http.post(this.urlDownload + "/" + token, { password }, { responseType: 'blob' });
-  // }
-
   downloadFile(token: string, body: { password?: string }): Observable<{ url: string; expiresIn: number }> {
     return this.http.post<{ url: string; expiresIn: number }>(
       `${this.urlDownload}/${token}`,
@@ -39,7 +33,7 @@ export class FileService {
     );
   }
 
-  delete(token: string): Observable<HttpResponse<void>> {
-    return this.http.delete<void>(this.urlFile + "/" + token, { observe: 'response' })
+  delete(fid: string): Observable<HttpResponse<void>> {
+    return this.http.delete<void>(this.urlFile + "/" + fid, { observe: 'response' })
   }
 }

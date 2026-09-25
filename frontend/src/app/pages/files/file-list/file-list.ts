@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FileMetaDataResponse } from '../../../_interfaces/fileMetaData';
 import { RouterLink } from '@angular/router';
 import { DatePipe, NgClass } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FileService } from '../../../_services/file';
 import { HttpResponse } from '@angular/common/http';
 
@@ -14,6 +15,7 @@ import { HttpResponse } from '@angular/common/http';
 })
 export class FileListComponent implements OnInit {
   private fileService = inject(FileService)
+  private destroyRef = inject(DestroyRef);
 
   filter = 'valid';
   filteredFiles = signal<FileMetaDataResponse[]>([]);
@@ -63,32 +65,41 @@ export class FileListComponent implements OnInit {
     }
   }
 
-  deleteFile(_token: string, _event: Event): void {
-    // event.preventDefault();
-    // const confirmed = window.confirm('Etes vous sur de vouloir supprimer ce fichier?');
+  deleteFile(fid: string): void {
+    const confirmed = window.confirm('Etes vous sur de vouloir supprimer ce fichier?');
 
-    // if (confirmed) {
+    if (confirmed) {
 
-    //   this.fileService.delete(token)
-    //     .pipe(takeUntilDestroyed(this.destroyRef))
-    //     .subscribe({
-    //       next: () => {                      
-    //         this.message = "Fichier correctement supprimé";
-    //         this.messageType = 'success';
-    //         this.closeMenuActionsMobile();
-    //         // List refresh
-    //         this.loadFilesMetaDatas();
-    //       },
-    //       error: (err) => {            
-    //         if (err.error && err.error.message) {
-    //             this.message = err.statusText + ': ' + err.error.message;
-    //           } else {
-    //             this.message = err.statusText + ': ' + err.error;
-    //           }
-    //           this.messageType = 'error';            
-    //       }
-    //     });
-    // }
+      this.fileService.delete(fid)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.message.set("Fichier correctement supprimé");
+            this.messageType.set('success');
+            this.closeMenuActionsMobile();
+
+            // Retire le fichier des deux listes sans rappeler l'API
+            this.fileMetaDatas.update(files => files.filter(f => f.id !== fid));
+            this.filteredFiles.update(files => files.filter(f => f.id !== fid));
+
+          },
+          error: (err) => {
+            this.message.set('');
+
+            if (err.status === 0) {
+              this.message.set('Impossible de contacter le serveur.\nVérifiez votre connexion ou réessayez plus tard.');
+            } else if (err.status === 401) {
+              this.message.set('Veuillez vous connecter.');
+            } else if (err.status === 403) {
+              this.message.set('Accès refusé.');
+            } else {
+              this.message.set('Une erreur est survenue. Merci de réessayer.');
+            }
+
+            this.messageType.set('error');
+          }
+        });
+    }
     console.log("delete file")
   }
 
