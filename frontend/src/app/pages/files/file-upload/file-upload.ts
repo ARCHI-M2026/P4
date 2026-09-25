@@ -3,6 +3,7 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FileService } from '../../../_services/file';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FileMetaDataResponse } from '../../../_interfaces/fileMetaData';
 
 @Component({
   selector: 'app-file-upload',
@@ -27,8 +28,10 @@ export class FileUploadComponent implements OnInit {
 
   // Selected file info
   selectedFile!: File;
-  selectedFileName: string | null = null;  
+  selectedFileName: string | null = null;
   selectedFileSize: string | null = null;
+
+  uploadedFile: FileMetaDataResponse | null = null;
 
   // Spinner
   isLoading = signal(false);
@@ -39,9 +42,9 @@ export class FileUploadComponent implements OnInit {
   /****************************************/
   ngOnInit() {
     this.fileForm = this.formBuilder.group(
-      {        
+      {
         password: ['', Validators.minLength(6)]
-      }      
+      }
     );
   }
 
@@ -61,21 +64,57 @@ export class FileUploadComponent implements OnInit {
     formData.append('expiration', this.selectExpiration.value);
     formData.append('file', this.selectedFile);
 
-    console.log(formData)
+//     downloadToken
+// : 
+// "6d978edd-d45b-4159-9958-76d3aa298984"
+// expiresAt
+// : 
+// "2026-09-30T14:58:31.100Z"
+// id
+// : 
+// "1a41ba90-8675-4e88-a4ab-07e979862e59"
+// isPasswordProtected
+// : 
+// true
+// mimeType
+// : 
+// "application/pdf"
+// originalName
+// : 
+// "2020_DWWM_Cours_BDD.pdf"
+// size
+// : 
+// 1418259
+// uploadedAt
+// : 
+// "2026-09-23T14:58:31.153Z"
+
+
     // TODO - controle champ ?
+    // TODO attention mot de passe optionnel
     this.isLoading.set(true)
     this.fileService.upload(formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response) => {
         this.isLoading.set(false);
-        // Handle successful upload
-        console.log('uploaded')
-        console.log(response)
+        this.submitted = false;
+
+        this.uploadedFile = response.body
+        this.showForm = false;
+
       },
       error: (err) => {
+        this.message = '';
         this.isLoading.set(false);
-        // Handle upload error
-        console.log('error')
-        console.log(err)
+
+        if (err.status === 0) {
+          this.message = 'Impossible de contacter le serveur.\nVérifiez votre connexion ou réessayez plus tard.';
+        } else if (err.status === 401) {
+          this.message = 'Vous n\'êtes pas autorisé à accéder à cette ressource.';
+        } else {
+          this.message = 'Une erreur est survenue. Merci de réessayer.';
+        }
+
+        this.messageType = 'error';
       }
     });
   }
@@ -109,10 +148,13 @@ export class FileUploadComponent implements OnInit {
 
   /****************************************/
 
+  generateFrontLink(){
+    return `${window.location.origin}/file/${this.uploadedFile?.downloadToken}`;
+  }
+
   copyLink() {
 
-    // TODO
-    const link = 'link'
+    const link = this.generateFrontLink();
 
     if (!link) return;
 
@@ -123,5 +165,15 @@ export class FileUploadComponent implements OnInit {
       .catch(err => {
         console.error('Erreur de copie', err);
       });
+  }
+
+  /********************************************/
+  /********************************************/
+
+  remainingDays(): number {
+    if (!this.uploadedFile) return 0;
+
+    const diffMs = new Date(this.uploadedFile.expiresAt).getTime() - Date.now();
+    return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
   }
 }
