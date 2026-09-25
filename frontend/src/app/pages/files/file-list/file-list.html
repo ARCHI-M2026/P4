@@ -50,7 +50,7 @@
             }
 
             <div class="file-action file-action-container">
-                <button class="file-action-button file-action-delete" (click)="deleteFile(fileMetaData.id, $event)">
+                <button class="file-action-button file-action-delete" (click)="deleteFile(fileMetaData.id)">
                     Supprimer
                 </button>
             </div>
@@ -68,7 +68,7 @@
 
                 @if (openedMenuToken === fileMetaData.downloadToken) {
                 <div class="file-action-mobile-popup">
-                    <button (click)="deleteFile(fileMetaData.downloadToken, $event)">Supprimer</button>
+                    <button (click)="deleteFile(fileMetaData.id)">Supprimer</button>
                     <a [routerLink]="['/file', fileMetaData.downloadToken]" (click)="closeMenuActionsMobile()">Accéder</a>
                 </div>
                 }
