@@ -64,37 +64,10 @@ export class FileUploadComponent implements OnInit {
     if (password) {
       formData.append('password', password);
     }
-    formData.append('expirationInDays', this.selectExpiration.value);
+    formData.append('expiresInDays', this.selectExpiration.value);
     formData.append('file', this.selectedFile);
 
-    //     downloadToken
-    // : 
-    // "6d978edd-d45b-4159-9958-76d3aa298984"
-    // expiresAt
-    // : 
-    // "2026-09-30T14:58:31.100Z"
-    // id
-    // : 
-    // "1a41ba90-8675-4e88-a4ab-07e979862e59"
-    // isPasswordProtected
-    // : 
-    // true
-    // mimeType
-    // : 
-    // "application/pdf"
-    // originalName
-    // : 
-    // "2020_DWWM_Cours_BDD.pdf"
-    // size
-    // : 
-    // 1418259
-    // uploadedAt
-    // : 
-    // "2026-09-23T14:58:31.153Z"
 
-
-    // TODO - controle champ ?
-    // TODO attention mot de passe optionnel
     this.isLoading.set(true)
     this.fileService.upload(formData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response) => {
@@ -133,20 +106,27 @@ export class FileUploadComponent implements OnInit {
     if (file) {
       this.selectedFile = file;
       this.selectedFileName = file.name;
-
-      const bytes = file.size;
-      const kb = bytes / 1024;
-      const mb = kb / 1024;
-      const gb = mb / 1024;
-
-      if (gb >= 1) {
-        this.selectedFileSize = `${gb.toFixed(2)} Go`;
-      } else if (mb >= 1) {
-        this.selectedFileSize = `${mb.toFixed(2)} Mo`;
-      } else {
-        this.selectedFileSize = `${kb.toFixed(2)} Ko`;
-      }
+      this.selectedFileSize = this.formatFileSize(file.size);
     }
+  }
+
+  formatFileSize(bytes: number): string {
+    const kb = bytes / 1024;
+    const mb = kb / 1024;
+    const gb = mb / 1024;
+
+    if (gb >= 1) {
+      return `${gb.toFixed(2)} Go`;
+    } else if (mb >= 1) {
+      return `${mb.toFixed(2)} Mo`;
+    } else {
+      return `${kb.toFixed(2)} Ko`;
+    }
+  }
+
+  uploadedFileSize(): string {
+    if (!this.uploadedFile) return '';
+    return this.formatFileSize(this.uploadedFile.size);
   }
 
   /****************************************/
