@@ -47,6 +47,7 @@
   flex-direction: row;
   gap: var(--sds-size-space-200);
   width: 100%;
+  min-width: 0; 
 }
 
 .form-io-row-noWidth { 
@@ -147,12 +148,14 @@
 .file-infos-container {
   display: flex;
   flex-direction: column;  
+  flex: 1 1 0;                
+  min-width: 0;
   padding-right: var(--sds-size-space-300);
   align-items: flex-start;
 }
 
 .file-infos-name {
-  max-width: 200px;
+  max-width: 100%; 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
