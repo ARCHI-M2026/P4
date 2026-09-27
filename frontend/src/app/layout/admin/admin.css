@@ -176,6 +176,11 @@
     align-self: stretch;
   }
 
+  .sidebar-mobile-header-icon{
+    border:none;
+    background:none;
+  }
+
   .sidebar-mobile-header-icon img {
     width: var(--sds-size-space-400);
     height: var(--sds-size-space-400);   
@@ -213,6 +218,7 @@
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;  
+    border: none;
     color: #803A00;
     font-feature-settings: 'liga' off;  
     font-size: 16px;
