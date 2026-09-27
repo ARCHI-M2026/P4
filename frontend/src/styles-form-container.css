@@ -91,7 +91,7 @@
     cursor: pointer;
 }
 
-.button-link a {
+.button-link button {
     color: #E27F29;
     font-family: var(--Main-Font);
     font-size: var(--sds-typography-body-size-medium);
@@ -99,6 +99,7 @@
     font-weight: var(--sds-typography-body-font-weight-regular);
     line-height: var(--sds-size-space-400);
     text-decoration: none;
+    cursor: pointer;
 }
 
 /* Inputs */

@@ -46,13 +46,15 @@
   background: rgba(255, 255, 255, 0.40);
 }
 
-.button-logout a {
+.button-logout button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  background: none;
+  border: none;
 }
 
-.button-logout a::before {
+.button-logout button::before {
   content: "";
   width: var(--sds-size-space-300);
   height: var(--sds-size-space-300);  

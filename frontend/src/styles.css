@@ -76,6 +76,7 @@ html, body {
   padding: var(--sds-size-space-300);
   cursor: pointer;
   margin-right: 0.5rem;
+  font-family: var(--Main-Font, "DM Sans");
 }
 
 .footer{
