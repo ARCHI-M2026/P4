@@ -1,5 +1,5 @@
 import { IsInt, IsOptional, IsString, Max, Min, MinLength } from "class-validator";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 import { ApiPropertyOptional } from "@nestjs/swagger";
 
 export class UploadFileDto{
@@ -22,6 +22,9 @@ export class UploadFileDto{
     example: "secret123",
   })
   @IsOptional()
+  @Transform(({ value }: { value: unknown }) =>
+    value === "" || value === null ? undefined : value,
+  )
   @IsString()
   @MinLength(6)
   password?: string;

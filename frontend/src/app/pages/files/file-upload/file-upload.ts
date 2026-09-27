@@ -60,34 +60,37 @@ export class FileUploadComponent implements OnInit {
     }
 
     const formData = new FormData();
-    formData.append('password', this.fileForm.get('password')?.value);
-    formData.append('expiration', this.selectExpiration.value);
+    const password = this.fileForm.get('password')?.value;
+    if (password) {
+      formData.append('password', password);
+    }
+    formData.append('expirationInDays', this.selectExpiration.value);
     formData.append('file', this.selectedFile);
 
-//     downloadToken
-// : 
-// "6d978edd-d45b-4159-9958-76d3aa298984"
-// expiresAt
-// : 
-// "2026-09-30T14:58:31.100Z"
-// id
-// : 
-// "1a41ba90-8675-4e88-a4ab-07e979862e59"
-// isPasswordProtected
-// : 
-// true
-// mimeType
-// : 
-// "application/pdf"
-// originalName
-// : 
-// "2020_DWWM_Cours_BDD.pdf"
-// size
-// : 
-// 1418259
-// uploadedAt
-// : 
-// "2026-09-23T14:58:31.153Z"
+    //     downloadToken
+    // : 
+    // "6d978edd-d45b-4159-9958-76d3aa298984"
+    // expiresAt
+    // : 
+    // "2026-09-30T14:58:31.100Z"
+    // id
+    // : 
+    // "1a41ba90-8675-4e88-a4ab-07e979862e59"
+    // isPasswordProtected
+    // : 
+    // true
+    // mimeType
+    // : 
+    // "application/pdf"
+    // originalName
+    // : 
+    // "2020_DWWM_Cours_BDD.pdf"
+    // size
+    // : 
+    // 1418259
+    // uploadedAt
+    // : 
+    // "2026-09-23T14:58:31.153Z"
 
 
     // TODO - controle champ ?
@@ -148,7 +151,7 @@ export class FileUploadComponent implements OnInit {
 
   /****************************************/
 
-  generateFrontLink(){
+  generateFrontLink() {
     return `${window.location.origin}/file/${this.uploadedFile?.downloadToken}`;
   }
 
