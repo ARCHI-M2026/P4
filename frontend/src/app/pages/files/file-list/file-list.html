@@ -1,5 +1,6 @@
 @if (message()) {
-<div class="alert" [ngClass]="{'alert-danger': messageType() === 'error', 'alert-success': messageType() === 'success'}">
+<div class="alert"
+    [ngClass]="{'alert-danger': messageType() === 'error', 'alert-success': messageType() === 'success'}">
     {{ message() }}
 </div>
 }
@@ -12,7 +13,8 @@
 
     <div class="form-io-row">
         <div class="filtres">
-            <button class="filtres-item active" [class.active]="filter === 'all'" (click)="filter = 'all'; filterFiles();">
+            <button class="filtres-item active" [class.active]="filter === 'all'"
+                (click)="filter = 'all'; filterFiles();">
                 Tous
             </button>
             <button class="filtres-item" [class.active]="filter === 'valid'" (click)="filter = 'valid'; filterFiles();">
@@ -32,13 +34,9 @@
             <div class="file-infos-icon"></div>
             <div class="file-infos-container">
                 <div class="file-infos-name">{{ fileMetaData.originalName }}</div>
-                <!-- <div class="file-infos-size"
-                    [ngClass]="getExpirationClass(fileMetaData.isExpired, fileMetaData.remainingDays)">
-                    {{ getExpirationLabel(fileMetaData.isExpired, fileMetaData.remainingDays) }}
-                </div> -->
-                <div class="file-infos-expiration-days">
-                    Téleversé le {{ fileMetaData.uploadedAt | date:'dd/MM/yyyy HH:mm:ss' }} -
-                    Expiration saisie : {{ fileMetaData.expiresAt | date:'dd/MM/yyyy HH:mm:ss' }}
+                <div class="file-infos-size"
+                    [ngClass]="getExpirationClass(isExpired(fileMetaData), remainingDays(fileMetaData))">
+                    {{ getExpirationLabel(isExpired(fileMetaData), remainingDays(fileMetaData)) }}
                 </div>
             </div>
         </div>
@@ -56,7 +54,8 @@
             </div>
 
             <div class="file-action file-action-container">
-                <div class="file-action-button file-action-access" [routerLink]="['/file', fileMetaData.downloadToken]">Accéder
+                <div class="file-action-button file-action-access" [routerLink]="['/file', fileMetaData.downloadToken]">
+                    Accéder
                 </div>
             </div>
 
@@ -69,7 +68,8 @@
                 @if (openedMenuToken === fileMetaData.downloadToken) {
                 <div class="file-action-mobile-popup">
                     <button (click)="deleteFile(fileMetaData.id)">Supprimer</button>
-                    <a [routerLink]="['/file', fileMetaData.downloadToken]" (click)="closeMenuActionsMobile()">Accéder</a>
+                    <a [routerLink]="['/file', fileMetaData.downloadToken]"
+                        (click)="closeMenuActionsMobile()">Accéder</a>
                 </div>
                 }
             </div>

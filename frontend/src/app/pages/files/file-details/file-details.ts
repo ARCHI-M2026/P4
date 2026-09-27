@@ -138,4 +138,21 @@ export class FileDetailsComponent implements OnInit {
 
     return 'expiration-notification';
   }
+
+  formattedSize(): string {
+    if (!this.fileMetaDataResponse) return '';
+
+    const bytes = this.fileMetaDataResponse.size;
+    const kb = bytes / 1024;
+    const mb = kb / 1024;
+    const gb = mb / 1024;
+
+    if (gb >= 1) {
+      return `${gb.toFixed(2)} Go`;
+    } else if (mb >= 1) {
+      return `${mb.toFixed(2)} Mo`;
+    } else {
+      return `${kb.toFixed(2)} Ko`;
+    }
+  }
 }

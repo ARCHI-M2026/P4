@@ -1,14 +1,14 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FileMetaDataResponse } from '../../../_interfaces/fileMetaData';
 import { RouterLink } from '@angular/router';
-import { DatePipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FileService } from '../../../_services/file';
 import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-file-list',
-  imports: [RouterLink, DatePipe, NgClass],
+  imports: [RouterLink, NgClass],
   standalone: true,
   templateUrl: './file-list.html',
   styleUrl: './file-list.css',
@@ -137,5 +137,15 @@ export class FileListComponent implements OnInit {
 
   closeMenuActionsMobile(): void {
     this.openedMenuToken = null;
+  }
+
+  /*************************************************/
+  isExpired(file: FileMetaDataResponse): boolean {
+    return new Date(file.expiresAt) <= new Date();
+  }
+
+  remainingDays(file: FileMetaDataResponse): number {
+    const diffMs = new Date(file.expiresAt).getTime() - Date.now();
+    return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
   }
 }
