@@ -55,6 +55,11 @@ html, body {
   align-items: center;
   padding: 2rem;
   text-align: center;
+  min-width: 0;
+}
+
+.main-content > * {
+  min-width: 0;
 }
 
 .appTitle {
