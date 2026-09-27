@@ -95,6 +95,8 @@
   font-style: normal;
   font-weight: 400;
   line-height: 16px; /* 100% */
+  background: none;
+  border: none;
 }
 
 .file-action-delete,
