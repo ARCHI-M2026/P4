@@ -193,6 +193,16 @@
     font-size: var(--Static-Headline-Small-Size);
   }
 
+  .file-action-mobile-popup button {
+    display: block;
+    padding: var(--sds-size-space-200);
+    text-decoration: none;
+    color: #000;
+    font-size: var(--Static-Headline-Small-Size);
+    border: none;
+    background: none;
+  }
+
   .file-action-mobile-popup a:hover {
     background: #f5f5f5;
   }
