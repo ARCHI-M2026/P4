@@ -10,7 +10,7 @@
         <div class="alert" [ngClass]="{
             'alert-danger': messageType === 'error',
             'alert-success': messageType === 'success'
-        }">
+        }" test-id="error-message">
             {{ message }}
         </div>
     }    
@@ -29,7 +29,7 @@
             <div class="form-io">
                 <label class="form-input-label" for="email">Email</label>                
                 <input class="form-input" type="text" 
-                    formControlName="email" id="email"                    
+                    formControlName="email" id="email", test-id="email"                    
                     placeholder="Saisissez votre email...">
                     @if (submitted && form['email'].errors) {
                         <div class="invalid-feedback">
@@ -46,7 +46,7 @@
             <div class="form-io">
                 <label class="form-input-label" for="password">Mot de passe</label>
                 <input class="form-input" type="password" 
-                    formControlName="password" id="password"                    
+                    formControlName="password" id="password" test-id="password"                   
                     placeholder="Saisissez votre mot de passe...">
                     @if (submitted && form['password'].errors) {
                         <div class="invalid-feedback">
@@ -62,7 +62,7 @@
             <div class="button-link">
                 <a routerLink="/register">Créer un compte</a>
             </div>
-            <button class="form-button">Connexion</button>
+            <button class="form-button" test-id="admin-login">Connexion</button>
         </div>
         
     </form>

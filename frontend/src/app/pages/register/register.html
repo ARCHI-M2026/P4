@@ -1,5 +1,5 @@
 
-<div class="form-container">
+<div class="form-container" test-id="register-form">
             
     <div class="form-title">
         Créer un compte
@@ -10,7 +10,7 @@
         <div class="alert" [ngClass]="{
             'alert-danger': messageType === 'error',
             'alert-success': messageType === 'success'
-        }">
+        }" test-id="error-message">
             {{ message }}
         </div>
     }
@@ -30,10 +30,10 @@
 
                 <label class="form-input-label" for="email">Email</label>                
                 <input type="email" class="form-input" 
-                formControlName="email" id="email"
+                formControlName="email" id="email" test-id="email"
                 placeholder="Saisissez votre email..."/>                
                 @if (submitted && form['email'].errors) {
-                    <div class="invalid-feedback">
+                    <div class="invalid-feedback" test-id="bad-email">
                         @if (form['email']?.errors?.['required']) {
                             <div>Veuillez saisir une adresse email</div>
                         }
@@ -48,10 +48,10 @@
                 
                 <label class="form-input-label" for="password">Mot de passe</label>
                 <input type="password" class="form-input"
-                formControlName="password" id="password"
+                formControlName="password" id="password" test-id="password"
                 placeholder="Saisissez votre mot de passe...">
                 @if (submitted && form['password'].errors) {
-                    <div class="invalid-feedback">
+                    <div class="invalid-feedback" test-id="bad-password">
                         @if (form['password']?.errors?.['required']) {
                             <div>Veuillez saisir votre mot de passe</div>
                         }
@@ -63,10 +63,10 @@
                 
                 <label class="form-input-label" for="confirmPassword">Vérification du mot de passe</label>
                 <input type="password" class="form-input"
-                formControlName="confirmPassword" id="confirmPassword"                
+                formControlName="confirmPassword" id="confirmPassword" test-id="password-confirmation"               
                 placeholder="Saisissez-le à nouveau">
                 @if (submitted && registerForm.errors?.['passwordMismatch']) {
-                    <div class="invalid-feedback">
+                    <div class="invalid-feedback" test-id="password-mismatch">
                         <div>Les mots de passe ne correspondent pas</div>
                     </div>
                 }
@@ -83,9 +83,9 @@
 
         <div class="form-button-container">
             <div class="register-button-reset">
-                <a routerLink="/login" (click)="onReset()">J'ai déjà un compte</a>
+                <a routerLink="/login" (click)="onReset()" test-id="login-link">J'ai déjà un compte</a>
             </div>
-            <button class="form-button">
+            <button class="form-button" test-id="register-button">
                 Créer mon compte
             </button>
         </div>

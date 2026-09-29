@@ -28,7 +28,7 @@
     </div>
 
     @for (fileMetaData of filteredFiles(); track fileMetaData.downloadToken) {
-    <div class="file-list-item">
+    <div class="file-list-item" test-id="file-item">
 
         <div class="form-io-row">
             <div class="file-infos-icon"></div>
@@ -48,7 +48,7 @@
             }
 
             <div class="file-action file-action-container">
-                <button class="file-action-button file-action-delete" (click)="deleteFile(fileMetaData.id)">
+                <button class="file-action-button file-action-delete" test-id="delete-file" (click)="deleteFile(fileMetaData.id)">
                     Supprimer
                 </button>
             </div>

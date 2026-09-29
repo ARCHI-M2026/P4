@@ -7,7 +7,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "play:run": "playwright test",
+    "play:open": "playwright test --ui",
+    "play:report": "playwright show-report"
   },
   "private": true,
   "packageManager": "npm@10.9.8",
@@ -26,6 +29,8 @@
     "@angular/cli": "^21.2.23",
     "@angular/compiler-cli": "^21.2.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
     "angular-eslint": "22.2.0",
     "eslint": "^10.9.0",
     "jsdom": "^28.0.0",

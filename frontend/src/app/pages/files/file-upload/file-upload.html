@@ -1,6 +1,6 @@
 <div class="form-container">
 
-    <div class="form-title">
+    <div class="form-title" test-id="upload-page">
         Ajouter un fichier
     </div>
 
@@ -32,7 +32,7 @@
                     }
 
                     <button type="button" class="button-select-file" (click)="fileInput.click()">Changer</button>
-                    <input #fileInput id="fileInput" type="file" hidden (change)="onFileSelected($event)">
+                    <input #fileInput id="fileInput" type="file" test-id="input-upload" hidden (change)="onFileSelected($event)">
                 </div>
 
                 <!-- Message -->
@@ -73,7 +73,7 @@
             </div>
 
             <div class="form-button-container" style="align-items: center;">
-                <button class="form-button-nostretch form-button-televerser" [disabled]="isLoading()">
+                <button class="form-button-nostretch form-button-televerser" [disabled]="isLoading()" test-id="upload-button">
                     {{ isLoading() ? 'Téléversement en cours...' : 'Téléverser' }}
                 </button>
             </div>
@@ -92,13 +92,13 @@
 
     </div>
 
-    <div class="form-io">
+    <div class="form-io" test-id="upload-confirmation">
 
         <div>Félicitations, ton fichier sera conservé chez nous 
             {{ remainingDays() === 7 ? 'pendant 1 semaine' : 'pendant ' + remainingDays() + ' jour(s)' }} !
         </div>
         <div class="file-url">
-            <a href="{{ generateFrontLink() }}" target="_blank">
+            <a href="{{ generateFrontLink() }}" target="_blank" test-id="file-url">
                 {{ generateFrontLink() }}
             </a>
         </div>

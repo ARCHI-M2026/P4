@@ -1,4 +1,4 @@
-<div class="form-container">
+<div class="form-container" test-id="download-page">
 
     <div class="form-title">
         Télécharger un fichier
@@ -47,7 +47,7 @@
 
     <div class="form-button-container">
         <button class="form-button form-button-telecharger" (click)="downloadFile()"
-            [disabled]="isLoading()">
+            [disabled]="isLoading()" test-id="download-button">
             {{ isLoading() ? 'Téléchargement...' : 'Télécharger' }}
         </button>
     </div>

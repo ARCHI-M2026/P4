@@ -1,4 +1,4 @@
-<div class="layout">
+<div class="layout" test-id="admin-layout">
 
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -29,9 +29,9 @@
 
         <header class="header">
 
-            <button class="btnMenu btnAddFiles" routerLink="/files/upload">Ajouter des fichiers</button>
+            <button class="btnMenu btnAddFiles" routerLink="/files/upload" test-id="go-to-upload">Ajouter des fichiers</button>
             <div class="button-link button-logout">
-                <button (click)="logout()">Déconnexion</button>
+                <button (click)="logout()" test-id="admin-logout">Déconnexion</button>
             </div>
         </header>
 
