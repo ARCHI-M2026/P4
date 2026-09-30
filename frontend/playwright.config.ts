@@ -12,8 +12,8 @@ import { defineConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests',
-  tsconfig: './tests/tsconfig.json',
+  testDir: './playwright',
+  tsconfig: './playwright/tsconfig.json',
   workers: 1,
   fullyParallel: false,
   // /* Fail the build on CI if you accidentally left test.only in the source code. */
