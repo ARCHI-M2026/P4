@@ -1,4 +1,5 @@
 import { test, expect } from './fixtures'
+import user from './data/user.json' with { type: 'json'}
 
 test.describe('US03 - Account Creation', () => {
 
@@ -16,9 +17,9 @@ test.describe('US03 - Account Creation', () => {
     })
 
     test('Should allow user to register', async ({ page, selector }) => {
-        await selector('email').fill('test@example.com')
-        await selector('password').fill('password123')
-        await selector('password-confirmation').fill('password123')
+        await selector('email').fill(user.goodEmail)
+        await selector('password').fill(user.goodPass)
+        await selector('password-confirmation').fill(user.goodPass)
 
         const [request] = await Promise.all([
             page.waitForRequest(req => req.method() === 'POST' && req.url().includes('/auth/register')),
@@ -27,8 +28,8 @@ test.describe('US03 - Account Creation', () => {
 
         const body = request.postDataJSON()
         expect(body).toMatchObject({
-            email: 'test@example.com',
-            password: 'password123'
+            email: user.goodEmail,
+            password: user.goodPass
         })
 
         const response = await request.response()
@@ -37,8 +38,8 @@ test.describe('US03 - Account Creation', () => {
 
     test('Should display error message for invalid email', async ({selector }) => {
         await selector('email').fill('invalid-email')
-        await selector('password').fill('password123')
-        await selector('password-confirmation').fill('password123')
+        await selector('password').fill(user.goodPass)
+        await selector('password-confirmation').fill(user.goodPass)
 
         await selector('register-button').click()
 
