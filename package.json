@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "description": "Outillage racine du monorepo (commitlint, etc.)",
   "devDependencies": {
-    "@commitlint/cli": "^19.0.0",
+    "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^19.0.0"
   }
 }
