@@ -4,6 +4,7 @@
 node_modules/
 **/node_modules/
 jspm_packages/
+_env/
 
 # =========================================
 # Variables d'environnement
