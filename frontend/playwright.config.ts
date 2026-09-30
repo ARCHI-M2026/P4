@@ -16,6 +16,8 @@ export default defineConfig({
   tsconfig: './playwright/tsconfig.json',
   workers: 1,
   fullyParallel: false,
+  globalSetup: './playwright/global-setup.ts',
+  globalTeardown: './playwright/global-teardown.ts',
   // /* Fail the build on CI if you accidentally left test.only in the source code. */
   // forbidOnly: !!process.env.CI,
   // /* Retry on CI only */

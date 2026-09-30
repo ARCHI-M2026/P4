@@ -1,13 +1,14 @@
   /// <reference types="node" />
 import { test as base, type Locator } from '@playwright/test'
-import { writeFileSync, mkdirSync } from 'fs'
+import { CoverageReport } from 'monocart-coverage-reports'
 import { selector } from '../helpers/selector'
+import { coverageOptions } from '../coverage.config'
 
-declare global {
-  interface Window {
-    __coverage__?: Record<string, unknown>;
-  }
-}
+// declare global {
+//   interface Window {
+//     __coverage__?: Record<string, unknown>;
+//   }
+// }
 
 interface Fixtures {
     selector: (elem: string) => Locator;
@@ -19,15 +20,17 @@ export const test = base.extend<Fixtures>({
         await use(elem => selector(page, elem))
     },
     // Collecte automatique après chaque test
-    autoCollectCoverage: [async ({ page }, use) => {
+    autoCollectCoverage: [async ({ page, browserName }, use) => {
+        const isChromium = browserName === 'chromium'
+        if (isChromium) {
+            await page.coverage.startJSCoverage({ resetOnNavigation: false })
+        }
+
         await use()
-        const coverage = await page.evaluate(() => window.__coverage__)
-        if (coverage) {
-            mkdirSync('.nyc_output', { recursive: true })
-            writeFileSync(
-                `.nyc_output/coverage-${Date.now()}.json`,
-                JSON.stringify(coverage)
-            )
+
+        if (isChromium) {
+            const coverage = await page.coverage.stopJSCoverage()
+            await new CoverageReport(coverageOptions).add(coverage)
         }
     }, { auto: true }] // Exécution sans import obligatoire
 })
