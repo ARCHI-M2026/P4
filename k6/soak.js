@@ -1,0 +1,25 @@
+// SOAK : charge normale maintenue longtemps pour détecter fuites mémoire et dégradations
+import { sleep } from 'k6'
+import { setup as uploadSetup, uploadFile } from './helpers/upload.js'
+
+export const options = {
+    stages: [
+        { duration: '5m', target: 20 },
+        { duration: '1h', target: 20 },
+        { duration: '5m', target: 0 },
+    ],
+    thresholds: {
+        http_req_failed: ['rate<0.01'],
+        'http_req_duration{name:upload}': ['p(95)<1500', 'p(99)<3000'],
+        upload_success: ['rate>0.99'],
+    },
+}
+
+export function setup() {
+    return uploadSetup()
+}
+
+export default function (data) {
+    uploadFile(data)
+    sleep(1)
+}

@@ -1,0 +1,4 @@
+# Dépendances Python de la documentation — installées par : mise run docs-install
+# MkDocs 2.0 casse les plugins et les thèmes : on reste sur la branche 1.x
+mkdocs>=1.6,<2
+mkdocs-material>=9.7,<10

@@ -1,0 +1,114 @@
+<div class="form-container">
+
+    <div class="form-title" test-id="upload-page">
+        Ajouter un fichier
+    </div>
+
+    @if (isLoading()) {
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <p class="spinner-text">Traitement en cours, veuillez patienter...</p>
+    </div>
+    }
+
+    @if (showForm) {
+    <div>
+        <form [formGroup]="fileForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+
+            <div class="form-io-container">
+
+                <div class="form-io-row">
+
+                    @if (selectedFileName) {
+                    <div class="form-io-row">
+                        <div class="file-infos-icon"></div>
+                        <div class="file-infos-container">
+                            <div class="file-infos-name">{{ selectedFileName }}</div>
+                            <div class="file-infos-size">{{ selectedFileSize }}</div>
+                        </div>
+                    </div>
+                    } @else {
+                    <label class="file-placeholder" for="fileInput">Sélectionner un fichier...</label>
+                    }
+
+                    <button type="button" class="button-select-file" (click)="fileInput.click()">Changer</button>
+                    <input #fileInput id="fileInput" type="file" test-id="input-upload" hidden (change)="onFileSelected($event)">
+                </div>
+
+                <!-- Message -->
+                @if (message) {
+                <div class="alert"
+                    [ngClass]="{'alert-danger': messageType === 'error', 'alert-success': messageType === 'success'}">
+                    {{ message }}
+                </div>
+                }
+
+                <div class="form-io">
+
+                    <label class="form-input-label" for="password">Mot de passe</label>
+                    <input type="password" class="form-input" formControlName="password" id="password"
+                        placeholder="Optionnel" />
+                    @if (submitted && form['password'].errors) {
+                    <div class="invalid-feedback">
+                        @if (form['password']?.errors?.['minlength']) {
+                        <div>Veuillez saisir un mot de passe d'au moins 6 caractères</div>
+                        }
+                    </div>
+                    }
+                </div>
+
+                <div class="form-io form-expiration">
+
+                    <label class="form-input-label" for="expiration">Expiration</label>
+                    <select class="form-input expiration" [formControl]="selectExpiration" id="expiration">
+                        <option value="1">1 Jour</option>
+                        <option value="2">2 Jours</option>
+                        <option value="3">3 Jours</option>
+                        <option value="4">4 Jours</option>
+                        <option value="5">5 Jours</option>
+                        <option value="6">6 Jours</option>
+                        <option value="7">7 Jours</option>
+                    </select>
+                </div>                
+            </div>
+
+            <div class="form-button-container" style="align-items: center;">
+                <button class="form-button-nostretch form-button-televerser" [disabled]="isLoading()" test-id="upload-button">
+                    {{ isLoading() ? 'Téléversement en cours...' : 'Téléverser' }}
+                </button>
+            </div>
+
+        </form>
+    </div>
+    } @else {
+
+    <div class="form-io-row" style="padding-left: var(--sds-size-space-400);">
+
+        <div class="file-infos-icon"></div>
+        <div class="file-infos-container">
+            <div class="file-infos-name">{{ uploadedFile?.originalName }}</div>
+            <div class="file-infos-size">{{ uploadedFileSize() }}</div>
+        </div>
+
+    </div>
+
+    <div class="form-io" test-id="upload-confirmation">
+
+        <div>Félicitations, ton fichier sera conservé chez nous 
+            {{ remainingDays() === 7 ? 'pendant 1 semaine' : 'pendant ' + remainingDays() + ' jour(s)' }} !
+        </div>
+        <div class="file-url">
+            <a href="{{ generateFrontLink() }}" target="_blank" test-id="file-url">
+                {{ generateFrontLink() }}
+            </a>
+        </div>
+    </div>
+
+        <div class="form-button-container" style="align-items: center;">
+            <button class="form-button-nostretch form-button-copier" (click)="copyLink()" >Copier le lien</button>
+        </div>
+        @if (linkCopied) {
+             <span class="link-copied"s>{{ linkCopied }}</span>                
+        }
+    }
+</div>

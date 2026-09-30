@@ -1,0 +1,95 @@
+.button-select-file {
+  margin-bottom: var(--sds-size-space-600);
+  margin-left: auto;
+  flex-shrink: 0;
+  cursor: pointer;
+  padding: var(--sds-size-space-200) var(--sds-size-space-300);
+  gap: var(--sds-size-space-200);
+  border-radius: var(--sds-size-radius-200);
+  border: var(--sds-size-stroke-border) solid #FFA569;
+  color: #E27F29;  
+}
+
+.file-placeholder {
+  display: flex;
+  padding-top: var(--sds-size-space-200);
+}
+
+.fileForm-uploaded-fileInfos-container {
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+  margin-left: var(--sds-size-space-200);
+  margin-top: var(--sds-size-space-600);
+  margin-bottom: var(--sds-size-space-600);
+}
+
+.file-url {
+  margin-top: var(--sds-size-space-400);
+}
+
+.file-url a {
+  color: #FFB88C;
+  padding-left: var(--sds-size-space-400);
+}
+
+.form-expiration {
+  width: 100%;
+}
+
+.expiration {
+  color: var(--sds-color-text-default-default);  
+}
+
+.fileForm-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.fileForm-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 4px;
+}
+
+.form-button-nostretch {    
+    display: flex;
+    padding: var(--sds-size-space-300);
+    justify-content: center;
+    align-items: center;      
+    color: #BA681F;
+    background: rgba(255, 129, 45, 0.13);
+    border-radius: var(--sds-size-radius-200);
+    border: var(--sds-size-stroke-border) solid rgba(205, 94, 20, 0.50);
+    font-family: var(--Main-Font, "DM Sans");
+    font-size: var(--sds-typography-body-size-medium);
+    font-style: normal;
+    font-weight: var(--sds-typography-body-font-weight-regular);
+    line-height: var(--Static-Headline-Small-Size);
+    cursor: pointer;
+}
+
+.form-button-televerser::before {
+  content: "";
+  width: var(--sds-size-space-400);
+  height: var(--sds-size-space-400);
+  padding-right: var(--sds-size-space-400);
+  background: url("/images/televerser-dark.svg") no-repeat center;
+  background-size: contain;
+}
+
+.form-button-copier::before {
+  content: "";
+  width: var(--sds-size-space-400);
+  height: var(--sds-size-space-400);
+  padding-right: var(--sds-size-space-400);
+  background: url("/images/file-copy.svg") no-repeat center;
+  background-size: contain;
+}
+
+.link-copied {
+    font-family: var(--Main-Font);
+    font-size: var(--sds-typography-body-size-small);
+}

@@ -34,7 +34,8 @@ export class FileService {
     await validateFileMagicNumber(file.buffer);
 
     // File name in minIO
-    const objectKey = `${userId}/${randomBytes(16).toString("hex")}-${file.originalname}`;
+    const originalName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+    const objectKey = `${userId}/${randomBytes(16).toString("hex")}-${originalName}`;
 
     await this.storage.upload(objectKey, file.buffer, file.mimetype);
 
@@ -50,7 +51,7 @@ export class FileService {
     const created = await this.prisma.file.create({
       data: {
         objectKey,
-        originalName: file.originalname,
+        originalName: originalName,
         mimeType: file.mimetype,
         size: file.size,
         expiresAt,

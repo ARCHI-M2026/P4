@@ -1,0 +1,94 @@
+
+<div class="form-container" test-id="register-form">
+            
+    <div class="form-title">
+        Créer un compte
+    </div>
+
+    <!-- Message -->    
+    @if (message) {
+        <div class="alert" [ngClass]="{
+            'alert-danger': messageType === 'error',
+            'alert-success': messageType === 'success'
+        }" test-id="error-message">
+            {{ message }}
+        </div>
+    }
+
+    @if (isLoading()) {
+        <div class="spinner-container" >
+            <div class="spinner"></div>
+            <p class="spinner-text">Traitement en cours, veuillez patienter...</p>
+        </div>
+    }
+    
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        
+        <div class="form-io-container">
+            
+            <div class="form-io">
+
+                <label class="form-input-label" for="email">Email</label>                
+                <input type="email" class="form-input" 
+                formControlName="email" id="email" test-id="email"
+                placeholder="Saisissez votre email..."/>                
+                @if (submitted && form['email'].errors) {
+                    <div class="invalid-feedback" test-id="bad-email">
+                        @if (form['email']?.errors?.['required']) {
+                            <div>Veuillez saisir une adresse email</div>
+                        }
+                        @if (form['email']?.errors?.['email']) {
+                            <div>Veuillez saisir une adresse email valide</div>
+                        }
+                    </div>
+                }
+            </div>
+            
+            <div class="form-io">
+                
+                <label class="form-input-label" for="password">Mot de passe</label>
+                <input type="password" class="form-input"
+                formControlName="password" id="password" test-id="password"
+                placeholder="Saisissez votre mot de passe...">
+                @if (submitted && form['password'].errors) {
+                    <div class="invalid-feedback" test-id="bad-password">
+                        @if (form['password']?.errors?.['required']) {
+                            <div>Veuillez saisir votre mot de passe</div>
+                        }
+                        @if (form['password']?.errors?.['minlength']) {
+                            <div>Veuillez saisir un mot de passe d'au moins 8 caractères</div>
+                        }
+                    </div>
+                }
+                
+                <label class="form-input-label" for="confirmPassword">Vérification du mot de passe</label>
+                <input type="password" class="form-input"
+                formControlName="confirmPassword" id="confirmPassword" test-id="password-confirmation"               
+                placeholder="Saisissez-le à nouveau">
+                @if (submitted && registerForm.errors?.['passwordMismatch']) {
+                    <div class="invalid-feedback" test-id="password-mismatch">
+                        <div>Les mots de passe ne correspondent pas</div>
+                    </div>
+                }
+                @if (submitted && form['confirmPassword'].errors) {
+                    <div class="invalid-feedback">
+                        @if (form['confirmPassword']?.errors?.['required']) {
+                            <div>Veuillez ressaisir votre mot de passe</div>
+                        }                        
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        <div class="form-button-container">
+            <div class="register-button-reset">
+                <a routerLink="/login" (click)="onReset()" test-id="login-link">J'ai déjà un compte</a>
+            </div>
+            <button class="form-button" test-id="register-button">
+                Créer mon compte
+            </button>
+        </div>
+    </form>
+      
+</div>

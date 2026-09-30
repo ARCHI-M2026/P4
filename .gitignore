@@ -4,6 +4,7 @@
 node_modules/
 **/node_modules/
 jspm_packages/
+_env/
 
 # =========================================
 # Variables d'environnement
@@ -35,6 +36,7 @@ coverage/
 **/coverage/
 .nyc_output/
 **/.nyc_output/
+**/tests/reports/
 
 # =========================================
 # Logs

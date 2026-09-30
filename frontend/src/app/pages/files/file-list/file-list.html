@@ -1,0 +1,82 @@
+@if (message()) {
+<div class="alert"
+    [ngClass]="{'alert-danger': messageType() === 'error', 'alert-success': messageType() === 'success'}">
+    {{ message() }}
+</div>
+}
+
+<div class="file-list-container">
+
+    <h1 class="form-title">
+        Mes fichiers
+    </h1>
+
+    <div class="form-io-row">
+        <div class="filtres">
+            <button class="filtres-item active" [class.active]="filter === 'all'"
+                (click)="filter = 'all'; filterFiles();">
+                Tous
+            </button>
+            <button class="filtres-item" [class.active]="filter === 'valid'" (click)="filter = 'valid'; filterFiles();">
+                Actifs
+            </button>
+            <button class="filtres-item" [class.active]="filter === 'expired'"
+                (click)="filter = 'expired'; filterFiles();">
+                Expirés
+            </button>
+        </div>
+    </div>
+
+    @for (fileMetaData of filteredFiles(); track fileMetaData.downloadToken) {
+    <div class="file-list-item" test-id="file-item">
+
+        <div class="form-io-row">
+            <div class="file-infos-icon"></div>
+            <div class="file-infos-container">
+                <div class="file-infos-name">{{ fileMetaData.originalName }}</div>
+                <div class="file-infos-size"
+                    [ngClass]="getExpirationClass(isExpired(fileMetaData), remainingDays(fileMetaData))">
+                    {{ getExpirationLabel(isExpired(fileMetaData), remainingDays(fileMetaData)) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="file-actions">
+
+            @if (fileMetaData.isPasswordProtected) {
+            <div class="file-action file-lock"></div>
+            }
+
+            <div class="file-action file-action-container">
+                <button class="file-action-button file-action-delete" test-id="delete-file" (click)="deleteFile(fileMetaData.id)">
+                    Supprimer
+                </button>
+            </div>
+
+            <div class="file-action file-action-container">
+                <div class="file-action-button file-action-access" [routerLink]="['/file', fileMetaData.downloadToken]">
+                    Accéder
+                </div>
+            </div>
+
+            <!-- Actions mobile -->
+            <div class="file-action-mobile-container">
+                <button class="file-action-mobile-btn" (click)="toggleMenuActionsMobile(fileMetaData.downloadToken)"
+                    aria-label="Ouvrir le menu" alt="Ouvrir le menu">
+                </button>
+
+                @if (openedMenuToken === fileMetaData.downloadToken) {
+                <div class="file-action-mobile-popup">
+                    <button (click)="deleteFile(fileMetaData.id)">Supprimer</button>
+                    <a [routerLink]="['/file', fileMetaData.downloadToken]"
+                        (click)="closeMenuActionsMobile()">Accéder</a>
+                </div>
+                }
+            </div>
+
+        </div>
+
+    </div>
+    }
+
+</div>

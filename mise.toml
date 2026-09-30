@@ -61,10 +61,63 @@ run = [
   "cd frontend && npm run lint",
 ]
 
+[tasks.docs-install]
+description = "Installe MkDocs et Material pour la documentation"
+run = "pip install -r requirements-docs.txt"
+
+[tasks.docs-openapi]
+description = "Régénère openapi.json depuis les décorateurs Nest et le copie dans la doc (Redis requis)"
+run = [
+  "cd backend && npm run docs:openapi",
+  "cp backend/openapi.json docs/backend/openapi.json",
+]
+
 [tasks.docs]
 description = "Sert la doc mkdocs en local"
 run = "mkdocs serve"
 
 [tasks.docs-build]
 description = "Build la doc mkdocs"
-run = "mkdocs build"
+run = "mkdocs build --strict"
+
+[tasks.k6]
+description = "Lance un scénario k6 sur l'upload (smoke, load, stress, soak, spike)"
+usage = '''
+arg "<script>" help="Scénario à lancer" {
+  choices "smoke" "load" "stress" "soak" "spike"
+}
+flag "--host <host>" help="Adresse du back vue depuis le conteneur" default="host.docker.internal"
+'''
+run = '''
+docker run --rm -i \
+  --user "$(id -u):$(id -g)" \
+  --add-host=host.docker.internal:host-gateway \
+  -v "$(pwd)/k6:/scripts" \
+  -e API_HOST="${usage_host}" \
+  grafana/k6 \
+  run "/scripts/${usage_script}.js"
+'''
+
+[tasks.k6-report]
+description = "Lance un scénario k6 et exporte le rapport HTML dans k6/reports"
+usage = '''
+arg "<script>" help="Scénario à lancer" {
+  choices "smoke" "load" "stress" "soak" "spike"
+}
+arg "[name]" help="Nom du rapport (défaut : <script>_<date>)"
+flag "--host <host>" help="Adresse du back vue depuis le conteneur" default="host.docker.internal"
+'''
+run = '''
+name="${usage_name:-${usage_script}_$(date +%Y-%m-%d_%H-%M)}"
+mkdir -p k6/reports
+docker run --rm -i \
+  --user "$(id -u):$(id -g)" \
+  --add-host=host.docker.internal:host-gateway \
+  -v "$(pwd)/k6:/scripts" \
+  -e API_HOST="${usage_host}" \
+  -e K6_WEB_DASHBOARD=true \
+  -e K6_WEB_DASHBOARD_EXPORT="/scripts/reports/report_${name}.html" \
+  grafana/k6 \
+  run "/scripts/${usage_script}.js"
+echo "Rapport : k6/reports/report_${name}.html"
+'''

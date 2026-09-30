@@ -1,0 +1,25 @@
+<div class="app-container" test-id="public-layout">
+
+    <header class="header">
+
+        <h1 class="appTitle">
+            DataShare
+        </h1>
+
+        <div>
+            @if (tokenService.isLogged()){
+            <button class="btnMenu" routerLink="/files" data-cy="app-button-monEspace">Mon espace</button>
+            } @else {
+            <button class="btnMenu" routerLink="/login" test-id="admin-link">Se connecter</button>
+            }
+        </div>
+    </header>
+
+    <main class="main-content">
+        <router-outlet />
+    </main>
+
+    <footer class="footer">
+        <p>Copyright DataShare© 2025</p>
+    </footer>
+</div>

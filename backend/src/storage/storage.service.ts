@@ -56,10 +56,12 @@ export class StorageService {
   async getPresignedDownloadUrl(
     objectKey: string,
     expiresInSeconds: number,
+    downloadFileName: string
   ): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: this.bucket,
       Key: objectKey,
+      ResponseContentDisposition: `attachment; filename="${downloadFileName}"`,
     });
 
     const url = await getSignedUrl(this.client, command, {

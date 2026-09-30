@@ -1,0 +1,184 @@
+/* Form */
+
+.form-container {
+  display: flex;  
+  padding: var(--sds-size-space-600);
+  flex-direction: column;
+  align-items: center;    
+  align-self: stretch;
+  gap: var(--sds-size-space-400);
+  border-radius: var(--sds-size-space-400);
+  background: #FFF;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.25);
+  font-family: var(--Main-Font);
+}
+
+.form-container,
+.form-container * {
+  min-width: 0;
+}
+
+.form-container > div {
+  align-self: stretch;
+}
+
+.form-title {
+  overflow: hidden;
+  color: #000;
+  text-align: center;
+  font-feature-settings: 'liga' off;
+  text-overflow: ellipsis;
+  font-family: var(--Main-Font);
+  font-size: var(--Static-Headline-Medium-Size);
+  font-style: normal;
+  font-weight: var(--sds-typography-body-font-weight-bold);
+  line-height: var(--Static-Headline-Large-Line-Height);
+}
+
+.form-io-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sds-size-space-400);
+  align-self: stretch;
+}
+
+.form-io {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  
+  gap: var(--sds-size-space-200);
+  flex: 1 0 0;  
+}
+
+.form-io-row { 
+  display: flex;
+  flex-direction: row;
+  gap: var(--sds-size-space-200);
+  width: 100%;
+  min-width: 0; 
+}
+
+.form-io-row-noWidth { 
+  display: flex;
+  flex-direction: row;
+  gap: var(--sds-size-space-200);
+}
+
+.form-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;  
+  margin-top: var(--sds-size-space-600);
+}
+
+.form-button {
+  display: flex;
+  padding: var(--sds-size-space-300);
+  justify-content: center;
+  align-items: center;  
+  align-self: stretch;
+  color: #BA681F;
+  background: rgba(255, 129, 45, 0.13);
+  border-radius: var(--sds-size-radius-200);
+  border: var(--sds-size-stroke-border) solid rgba(205, 94, 20, 0.50);
+  font-family: var(--Main-Font, "DM Sans");
+  font-size: var(--sds-typography-body-size-medium);
+  font-style: normal;
+  font-weight: var(--sds-typography-body-font-weight-regular);
+  line-height: var(--Static-Headline-Small-Size);
+  cursor: pointer;
+}
+
+.button-link {
+    padding: var(--sds-size-space-300);
+    justify-content: center;
+    align-items: center;
+    gap: var(--sds-size-space-200);
+    align-self: stretch;
+    cursor: pointer;
+}
+
+.button-link a{
+  text-decoration: none;
+  color: #BA681F;
+}
+
+.button-link button {
+    color: #E27F29;
+    font-family: var(--Main-Font);
+    font-size: var(--sds-typography-body-size-medium);
+    font-style: normal;
+    font-weight: var(--sds-typography-body-font-weight-regular);
+    line-height: var(--sds-size-space-400);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Inputs */
+.form-input-label {
+    color: var(--sds-color-text-default-default);    
+    font-family: Inter;
+    font-size: var(--sds-typography-body-size-medium);
+    font-style: normal;
+    font-weight: var(--sds-typography-body-font-weight-regular);
+    line-height: 150%;
+}
+
+.form-input {
+    display: flex;
+    min-width: 240px;
+    box-sizing: border-box;
+    padding: var(--sds-size-space-300) var(--sds-size-space-400);
+    align-items: center;
+    align-self: stretch;    
+    border-radius: var(--sds-size-radius-200);
+    border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+    background: var(--sds-color-background-default-default);
+    color: var(--sds-color-text-default-tertiary);
+    font-family: var(--Main-Font);
+    font-size: var(--sds-typography-body-size-medium);
+    font-style: normal;
+    font-weight: var(--sds-typography-body-font-weight-regular);
+    line-height: 100%;     
+}
+
+.form-input::placeholder {  
+  color: var(--sds-color-text-default-tertiary);
+  font-family: var(--Main-Font);
+  font-size: var(--sds-typography-body-size-medium);  
+}
+
+/* File Infos */
+
+.file-infos-icon {
+  width: 24px;
+  height: 24px;
+  background-image: url("/images/file-selector.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-top: 7px;
+}
+
+.file-infos-container {
+  display: flex;
+  flex-direction: column;  
+  flex: 1 1 0;                
+  min-width: 0;
+  padding-right: var(--sds-size-space-300);
+  align-items: flex-start;
+}
+
+.file-infos-name {
+  max-width: 100%; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-infos-size, 
+.file-infos-expiration-days, 
+.file-infos-tags {
+  font-size: var(--sds-typography-body-size-small);
+}

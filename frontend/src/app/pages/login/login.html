@@ -1,0 +1,69 @@
+
+<div class="form-container">
+    
+    <div class="form-title">
+        Connexion
+    </div>
+
+    <!-- Message -->
+    @if (message) {    
+        <div class="alert" [ngClass]="{
+            'alert-danger': messageType === 'error',
+            'alert-success': messageType === 'success'
+        }" test-id="error-message">
+            {{ message }}
+        </div>
+    }    
+        
+    @if (isLoading()) {
+        <div class="spinner-container">
+            <div class="spinner"></div>
+            <p class="spinner-text">Traitement en cours, veuillez patienter...</p>
+        </div>
+    }
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        
+        <div class="form-io-container">
+
+            <div class="form-io">
+                <label class="form-input-label" for="email">Email</label>                
+                <input class="form-input" type="text" 
+                    formControlName="email" id="email", test-id="email"                    
+                    placeholder="Saisissez votre email...">
+                    @if (submitted && form['email'].errors) {
+                        <div class="invalid-feedback">
+                            @if (form['email']?.errors?.['required']) {
+                                <div>Veuillez saisir votre email</div>
+                            }
+                            @if (form['email']?.errors?.['email']) {
+                                <div>Veuillez saisir une adresse email valide</div>
+                            }
+                        </div>
+                    }            
+            </div>
+
+            <div class="form-io">
+                <label class="form-input-label" for="password">Mot de passe</label>
+                <input class="form-input" type="password" 
+                    formControlName="password" id="password" test-id="password"                   
+                    placeholder="Saisissez votre mot de passe...">
+                    @if (submitted && form['password'].errors) {
+                        <div class="invalid-feedback">
+                        @if (form['password']?.errors?.['required']) {
+                            <div>Veuillez saisir votre mot de passe</div>
+                        }                            
+                        </div>
+                    }
+            </div>
+        </div>
+
+        <div class="form-button-container">
+            <div class="button-link">
+                <a routerLink="/register">Créer un compte</a>
+            </div>
+            <button class="form-button" test-id="admin-login">Connexion</button>
+        </div>
+        
+    </form>
+</div>
