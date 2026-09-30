@@ -1,0 +1,1836 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation technique de DataShare, application de transfert de fichiers avec liens temporaires.">
+      
+      
+      
+      
+        <link rel="prev" href="../tests/">
+      
+      
+        <link rel="next" href="../maintenance/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Performance - DataShare</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#performance" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href=".." title="DataShare" class="md-header__button md-logo" aria-label="DataShare" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DataShare
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Performance
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer en mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passer en mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer en mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passer en mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href=".." class="md-tabs__link">
+          
+  
+  
+  Accueil
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../backend/" class="md-tabs__link">
+          
+  
+  
+  Backend
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../frontend/" class="md-tabs__link">
+          
+  
+  
+  Frontend
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../tests/" class="md-tabs__link">
+          
+  
+  
+  Qualité
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../maintenance/" class="md-tabs__link">
+          
+  
+  
+  Exploitation
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="DataShare" class="md-nav__button md-logo" aria-label="DataShare" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    DataShare
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Accueil
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Présentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../versions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stack et versions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Backend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backend/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API (OpenAPI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qualité
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Qualité
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#methode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Méthode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Méthode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outil-et-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outil et scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lancement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lancement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenarios-et-seuils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scénarios et seuils
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditions-de-mesure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conditions de mesure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resultats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Résultats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Résultats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synthese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthèse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smoke" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Smoke
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soak" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Soak
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spike
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analyse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ce-qui-fonctionne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ce qui fonctionne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#le-point-faible-des-gels-periodiques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Le point faible : des gels périodiques
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommandations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommandations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#effet-des-tests-sur-les-donnees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Effet des tests sur les données
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rapports-complets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rapports complets
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exploitation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../securite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#methode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Méthode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Méthode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outil-et-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outil et scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lancement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lancement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenarios-et-seuils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scénarios et seuils
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditions-de-mesure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conditions de mesure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resultats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Résultats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Résultats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synthese" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthèse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smoke" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Smoke
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soak" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Soak
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spike
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analyse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ce-qui-fonctionne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ce qui fonctionne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#le-point-faible-des-gels-periodiques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Le point faible : des gels périodiques
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommandations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommandations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#effet-des-tests-sur-les-donnees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Effet des tests sur les données
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rapports-complets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rapports complets
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="performance">Performance<a class="headerlink" href="#performance" title="Permanent link">&para;</a></h1>
+<p>Cette page présente les tests de charge de la fonctionnalité d'<strong>upload</strong> (<code>POST /file</code>) et l'analyse de leurs résultats. L'upload est la route la plus exigeante de l'API : elle reçoit le fichier, vérifie son type, l'envoie à MinIO, écrit en base et programme un job Redis.</p>
+<h2 id="methode">Méthode<a class="headerlink" href="#methode" title="Permanent link">&para;</a></h2>
+<h3 id="outil-et-scripts">Outil et scripts<a class="headerlink" href="#outil-et-scripts" title="Permanent link">&para;</a></h3>
+<p>Les tests utilisent <strong>k6</strong>, lancé dans son image Docker officielle. Les scripts sont dans <code>k6/</code> :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>k6/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── helpers/upload.js   # logique commune
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── smoke.js            # un fichier par scénario
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── load.js
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── stress.js
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── soak.js
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── spike.js
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>└── reports/            # rapports HTML exportés
+</code></pre></div>
+<p>Déroulé d'un test :</p>
+<ol>
+<li><strong><code>setup()</code></strong>, une seule fois : création du compte de test (un <code>401</code> « compte existant » est accepté), puis connexion pour obtenir un JWT.</li>
+<li><strong>Chaque itération d'un utilisateur virtuel (VU)</strong> : envoi d'un fichier texte de <strong>100 Ko</strong> généré en mémoire, avec <code>expiresInDays: 1</code>, puis pause d'<strong>1 seconde</strong>.</li>
+<li><strong>Vérifications</strong> (<code>check</code>) : statut <code>201</code> et présence d'un <code>id</code> dans la réponse. La métrique <code>upload_success</code> enregistre le taux de réussite, <code>upload_duration</code> la durée de chaque upload.</li>
+<li><strong>Renouvellement du token</strong> : si l'API répond <code>401</code> parce que le JWT a expiré (après 1 h), le VU se reconnecte et renvoie le fichier.</li>
+</ol>
+<h3 id="lancement">Lancement<a class="headerlink" href="#lancement" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mise<span class="w"> </span>run<span class="w"> </span>k6<span class="w"> </span>smoke<span class="w">                 </span><span class="c1"># affichage dans le terminal</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>mise<span class="w"> </span>run<span class="w"> </span>k6-report<span class="w"> </span>load<span class="w">           </span><span class="c1"># + rapport HTML dans k6/reports/</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mise<span class="w"> </span>run<span class="w"> </span>k6<span class="w"> </span>stress<span class="w"> </span>--host<span class="w"> </span>&lt;IP&gt;<span class="w">    </span><span class="c1"># adresse de l'API si besoin</span>
+</code></pre></div>
+<p>Variables disponibles : <code>API_HOST</code>, <code>API_PORT</code>, <code>BASE_URL</code>, <code>FILE_SIZE_KB</code>, <code>PERF_EMAIL</code>, <code>PERF_PASSWORD</code>.</p>
+<h3 id="scenarios-et-seuils">Scénarios et seuils<a class="headerlink" href="#scenarios-et-seuils" title="Permanent link">&para;</a></h3>
+<p>Un test est réussi si tous ses seuils (<code>thresholds</code>) sont respectés. Les seuils sont plus tolérants à mesure que la charge devient anormale.</p>
+<table>
+<thead>
+<tr>
+<th>Scénario</th>
+<th>Objectif</th>
+<th>Profil de charge</th>
+<th>Durée</th>
+<th>Seuils</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Smoke</strong></td>
+<td>Vérifier que le script et l'API fonctionnent</td>
+<td>2 VUs constants</td>
+<td>1 min</td>
+<td>erreurs &lt; 1 %, p95 &lt; 1 s, réussite &gt; 99 %</td>
+</tr>
+<tr>
+<td><strong>Load</strong></td>
+<td>Charge normale attendue</td>
+<td>0 → 20 VUs (2 min), 20 VUs (5 min), → 0 (2 min)</td>
+<td>9 min</td>
+<td>erreurs &lt; 1 %, p95 &lt; 1,5 s, p99 &lt; 3 s, réussite &gt; 99 %</td>
+</tr>
+<tr>
+<td><strong>Stress</strong></td>
+<td>Trouver les limites</td>
+<td>Paliers de 3 min à 20, 50 puis 100 VUs</td>
+<td>18 min</td>
+<td>erreurs &lt; 5 %, p95 &lt; 3 s, réussite &gt; 95 %</td>
+</tr>
+<tr>
+<td><strong>Soak</strong></td>
+<td>Détecter une dégradation dans la durée</td>
+<td>20 VUs pendant 1 h</td>
+<td>70 min</td>
+<td>erreurs &lt; 1 %, p95 &lt; 1,5 s, p99 &lt; 3 s, réussite &gt; 99 %</td>
+</tr>
+<tr>
+<td><strong>Spike</strong></td>
+<td>Encaisser un pic soudain et s'en remettre</td>
+<td>5 VUs, puis 100 VUs en 10 s pendant 1 min, retour à 5</td>
+<td>5 min</td>
+<td>erreurs &lt; 10 %, p95 &lt; 5 s, réussite &gt; 90 %</td>
+</tr>
+</tbody>
+</table>
+<p><em>p95 : 95 % des uploads sont plus rapides que cette durée. p99 : 99 % des uploads.</em></p>
+<h3 id="conditions-de-mesure">Conditions de mesure<a class="headerlink" href="#conditions-de-mesure" title="Permanent link">&para;</a></h3>
+<p>Les tests ont été exécutés le <strong>30 septembre 2026, de 15 h 09 à 17 h 01</strong>, sur le poste de développement :</p>
+<ul>
+<li>k6, l'API NestJS, MinIO et Redis tournent sur <strong>la même machine</strong> ; la base PostgreSQL est <strong>hébergée à distance</strong> (Prisma Postgres).</li>
+<li>Les valeurs mesurent donc ce poste, pas un serveur de production. Elles servent à comparer les scénarios entre eux et à repérer des comportements anormaux, pas à fixer une capacité absolue.</li>
+</ul>
+<h2 id="resultats">Résultats<a class="headerlink" href="#resultats" title="Permanent link">&para;</a></h2>
+<h3 id="synthese">Synthèse<a class="headerlink" href="#synthese" title="Permanent link">&para;</a></h3>
+<div class="perf-summary">
+<table>
+<thead>
+<tr>
+<th>Scénario</th>
+<th style="text-align: right;">Uploads</th>
+<th style="text-align: right;">Débit moyen</th>
+<th style="text-align: right;">Médiane</th>
+<th style="text-align: right;">p95</th>
+<th style="text-align: right;">p99</th>
+<th style="text-align: right;">Max</th>
+<th style="text-align: right;">Erreurs</th>
+<th style="text-align: center;">Seuils</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Smoke</td>
+<td style="text-align: right;">114</td>
+<td style="text-align: right;">1,9 req/s</td>
+<td style="text-align: right;">55 ms</td>
+<td style="text-align: right;">80 ms</td>
+<td style="text-align: right;">177 ms</td>
+<td style="text-align: right;">241 ms</td>
+<td style="text-align: right;">0 %</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Load</td>
+<td style="text-align: right;">7 506</td>
+<td style="text-align: right;">13,9 req/s</td>
+<td style="text-align: right;">61 ms</td>
+<td style="text-align: right;">566 ms</td>
+<td style="text-align: right;">828 ms</td>
+<td style="text-align: right;">1,6 s</td>
+<td style="text-align: right;">0 %</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Stress</td>
+<td style="text-align: right;">38 776</td>
+<td style="text-align: right;">35,9 req/s</td>
+<td style="text-align: right;">181 ms</td>
+<td style="text-align: right;">1,32 s</td>
+<td style="text-align: right;">5,13 s</td>
+<td style="text-align: right;">12,5 s</td>
+<td style="text-align: right;">0 %</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Soak</td>
+<td style="text-align: right;">69 786</td>
+<td style="text-align: right;">16,6 req/s</td>
+<td style="text-align: right;">63 ms</td>
+<td style="text-align: right;">314 ms</td>
+<td style="text-align: right;">1,01 s</td>
+<td style="text-align: right;">13,9 s</td>
+<td style="text-align: right;">0 %</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Spike</td>
+<td style="text-align: right;">5 209</td>
+<td style="text-align: right;">17,9 req/s</td>
+<td style="text-align: right;">213 ms</td>
+<td style="text-align: right;">2,25 s</td>
+<td style="text-align: right;">6,36 s</td>
+<td style="text-align: right;">8,5 s</td>
+<td style="text-align: right;">0 %</td>
+<td style="text-align: center;">✅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>Durées issues de la métrique <code>upload_duration</code> (durée de la requête d'upload). Le débit moyen inclut les montées et descentes en charge.</em></p>
+<p><strong>Les cinq scénarios respectent tous leurs seuils, sans aucune erreur</strong> : sur plus de 121 000 uploads, chaque réponse a été un <code>201</code> avec un identifiant. La fonctionnalité est fiable sous charge. En revanche, les maxima et les p99 montrent des <strong>ralentissements ponctuels importants</strong>, analysés plus bas.</p>
+<h3 id="smoke">Smoke<a class="headerlink" href="#smoke" title="Permanent link">&para;</a></h3>
+<p>Avec 2 VUs, l'upload répond en <strong>55 ms</strong> en médiane, 80 ms au p95. C'est la <strong>référence</strong> du temps de traitement d'un upload de 100 Ko sans concurrence. Le script, le compte de test et l'infrastructure fonctionnent.</p>
+<h3 id="load">Load<a class="headerlink" href="#load" title="Permanent link">&para;</a></h3>
+<figure class="perf-chart">
+<p><img alt="Load : VUs et durée d'upload par fenêtre de 10 secondes" src="../assets/perf/load-timeline.svg" /></p>
+</figure>
+<ul>
+<li>Sur le plateau à 20 VUs, le débit est de <strong>17,3 req/s</strong> en moyenne, proche du maximum théorique (20 VUs qui attendent 1 s entre deux envois donnent au plus ~19 req/s). L'API suit donc la charge.</li>
+<li>La médiane reste à <strong>~65 ms</strong> : 20 utilisateurs simultanés ne ralentissent quasiment pas le cas courant.</li>
+<li>En revanche, <strong>toutes les 70 à 110 secondes environ</strong>, une fenêtre de 10 à 20 secondes voit la durée monter à 0,5–1,3 s et le débit chuter de 18 à 12–14 req/s. Ces épisodes expliquent à eux seuls l'écart entre la médiane (61 ms) et le p95 (566 ms).</li>
+</ul>
+<h3 id="stress">Stress<a class="headerlink" href="#stress" title="Permanent link">&para;</a></h3>
+<figure class="perf-chart">
+<p><img alt="Stress : VUs et durée d'upload par fenêtre de 10 secondes" src="../assets/perf/stress-timeline.svg" /></p>
+</figure>
+<table>
+<thead>
+<tr>
+<th>Palier</th>
+<th style="text-align: right;">Débit</th>
+<th style="text-align: right;">Médiane (par fenêtre)</th>
+<th style="text-align: right;">p95 (par fenêtre)</th>
+<th style="text-align: right;">Fenêtres avec p95 &gt; 1 s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20 VUs</td>
+<td style="text-align: right;">17,6 req/s</td>
+<td style="text-align: right;">61 ms</td>
+<td style="text-align: right;">213 ms</td>
+<td style="text-align: right;">0 sur 15</td>
+</tr>
+<tr>
+<td>50 VUs</td>
+<td style="text-align: right;">35,7 req/s</td>
+<td style="text-align: right;">173 ms</td>
+<td style="text-align: right;">309 ms</td>
+<td style="text-align: right;">7 sur 18</td>
+</tr>
+<tr>
+<td>100 VUs</td>
+<td style="text-align: right;">65,4 req/s</td>
+<td style="text-align: right;">275 ms</td>
+<td style="text-align: right;">697 ms</td>
+<td style="text-align: right;">8 sur 18</td>
+</tr>
+</tbody>
+</table>
+<p><em>Valeurs typiques : médiane des valeurs mesurées sur chaque fenêtre de 10 s du palier.</em></p>
+<ul>
+<li><strong>Le débit progresse avec la charge</strong> (17 → 36 → 65 req/s) et aucune requête n'échoue, même à 100 VUs. Le point de rupture (apparition d'erreurs) n'est pas atteint à 100 VUs.</li>
+<li><strong>La latence typique augmente</strong> : de 61 ms à 20 VUs à ~275 ms à 100 VUs. Le débit reste en dessous du maximum théorique (~43 req/s à 50 VUs, ~78 req/s à 100 VUs), ce qui indique que l'API commence à saturer.</li>
+<li><strong>Les gels deviennent plus fréquents et plus longs</strong> avec la charge. Le plus marquant survient dès 20 VUs, en fin de montée (vers 2 min 20) : pendant ~10 s, l'API ne traite presque plus rien (0,6 req/s) et les uploads en cours attendent jusqu'à <strong>12,5 s</strong>. À 50 et 100 VUs, des gels de 4 à 10 s reviennent toutes les 1 à 2 minutes.</li>
+<li>Le seuil p95 &lt; 3 s est respecté (1,32 s), mais le <strong>p99 atteint 5,1 s</strong> : 1 upload sur 100 subit un gel.</li>
+</ul>
+<h3 id="soak">Soak<a class="headerlink" href="#soak" title="Permanent link">&para;</a></h3>
+<figure class="perf-chart">
+<p><img alt="Soak : VUs et durée d'upload par fenêtre de 10 secondes" src="../assets/perf/soak-timeline.svg" /></p>
+</figure>
+<table>
+<thead>
+<tr>
+<th>Tranche</th>
+<th style="text-align: right;">Débit</th>
+<th style="text-align: right;">Fenêtres dégradées (p95 &gt; 500 ms)</th>
+<th style="text-align: right;">Pire p95 sur 10 s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 – 10 min (montée)</td>
+<td style="text-align: right;">13,6 req/s</td>
+<td style="text-align: right;">4 sur 60</td>
+<td style="text-align: right;">3,3 s</td>
+</tr>
+<tr>
+<td>10 – 20 min</td>
+<td style="text-align: right;">18,3 req/s</td>
+<td style="text-align: right;">4 sur 60</td>
+<td style="text-align: right;">1,9 s</td>
+</tr>
+<tr>
+<td>20 – 30 min</td>
+<td style="text-align: right;">18,0 req/s</td>
+<td style="text-align: right;">8 sur 60</td>
+<td style="text-align: right;">4,6 s</td>
+</tr>
+<tr>
+<td>30 – 40 min</td>
+<td style="text-align: right;">17,8 req/s</td>
+<td style="text-align: right;">6 sur 60</td>
+<td style="text-align: right;">7,1 s</td>
+</tr>
+<tr>
+<td>40 – 50 min</td>
+<td style="text-align: right;">17,7 req/s</td>
+<td style="text-align: right;">8 sur 60</td>
+<td style="text-align: right;">13,7 s</td>
+</tr>
+<tr>
+<td>50 – 60 min</td>
+<td style="text-align: right;">17,9 req/s</td>
+<td style="text-align: right;">8 sur 60</td>
+<td style="text-align: right;">3,3 s</td>
+</tr>
+<tr>
+<td>60 – 70 min (descente)</td>
+<td style="text-align: right;">13,1 req/s</td>
+<td style="text-align: right;">12 sur 60</td>
+<td style="text-align: right;">8,9 s</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Pas de dérive du cas courant</strong> : sur 1 h à 20 VUs, la médiane reste entre 52 et 71 ms et le débit stable autour de 18 req/s. Il n'y a pas de fuite qui ralentirait progressivement toutes les requêtes.</li>
+<li><strong>Les épisodes de gel deviennent plus fréquents et plus longs</strong> au fil du test : 4 fenêtres dégradées par tranche de 10 minutes au début, 6 à 8 ensuite. Le pire survient à <strong>41 min 50</strong> : aucune réponse pendant 10 secondes, puis des uploads terminés en <strong>13,9 s</strong>.</li>
+<li><strong>Le renouvellement du token fonctionne</strong> : à 60 min, les JWT expirent, chaque VU reçoit un <code>401</code>, se reconnecte et renvoie son fichier. Ces 40 requêtes supplémentaires (20 connexions + 20 nouveaux envois) n'ont provoqué aucun échec.</li>
+</ul>
+<h3 id="spike">Spike<a class="headerlink" href="#spike" title="Permanent link">&para;</a></h3>
+<figure class="perf-chart">
+<p><img alt="Spike : VUs et durée d'upload par fenêtre de 10 secondes" src="../assets/perf/spike-timeline.svg" /></p>
+</figure>
+<ul>
+<li>Pendant le pic à 100 VUs, l'API monte à <strong>84 req/s</strong> au meilleur moment, 56 req/s en moyenne, sans aucune erreur. La latence se dégrade nettement : p95 de 2 s sur la période, et des uploads jusqu'à 8,5 s pendant un gel.</li>
+<li><strong>La récupération est immédiate</strong> : dans les 10 secondes qui suivent le retour à 5 VUs, la médiane revient à <strong>41 ms</strong>, soit le niveau d'avant le pic.</li>
+<li>Un épisode de ralentissement (p95 de 1,9 s) apparaît encore environ 1 min 20 après le pic, avec seulement 5 VUs.</li>
+</ul>
+<h2 id="analyse">Analyse<a class="headerlink" href="#analyse" title="Permanent link">&para;</a></h2>
+<h3 id="ce-qui-fonctionne">Ce qui fonctionne<a class="headerlink" href="#ce-qui-fonctionne" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Fiabilité</strong> : 0 erreur sur 121 391 uploads, dans tous les scénarios, y compris à 100 VUs et pendant 1 h.</li>
+<li><strong>Tenue en charge normale</strong> : à 20 VUs, la médiane reste autour de 60 ms et le débit suit la demande.</li>
+<li><strong>Élasticité</strong> : l'API absorbe un pic x20 en 10 secondes et revient à la normale aussitôt après.</li>
+<li><strong>Endurance</strong> : pas de dégradation progressive du cas courant sur 1 h, et renouvellement correct des sessions expirées.</li>
+</ul>
+<h3 id="le-point-faible-des-gels-periodiques">Le point faible : des gels périodiques<a class="headerlink" href="#le-point-faible-des-gels-periodiques" title="Permanent link">&para;</a></h3>
+<p>Le même phénomène apparaît dans <strong>tous les scénarios sauf le smoke</strong> : pendant quelques secondes, <strong>tous les VUs sont ralentis en même temps</strong>, le débit s'effondre, puis tout redevient normal. Il se produit dès 20 VUs, plus souvent quand la charge augmente, et plus souvent au fil du temps dans le soak.</p>
+<p>Comme toutes les requêtes sont touchées ensemble, la cause est côté serveur et bloque l'ensemble du traitement. k6 mesure le temps de réponse, pas l'intérieur du serveur, donc les causes ci-dessous sont des <strong>hypothèses à vérifier</strong> :</p>
+<ol>
+<li><strong>Pauses du ramasse-miettes de Node.js.</strong> Multer est configuré en <code>memoryStorage</code> : chaque fichier est entièrement chargé en mémoire avant d'être envoyé à MinIO. À 100 req/s de 100 Ko, cela représente ~10 Mo de tampons à allouer puis libérer chaque seconde. Une collecte majeure bloque la boucle d'événements de Node pendant toute sa durée. Cette hypothèse est cohérente avec la fréquence qui augmente avec la charge.</li>
+<li><strong>Latence de la base hébergée.</strong> Chaque upload fait une écriture sur une base PostgreSQL distante. Un ralentissement réseau ou côté hébergeur mettrait en attente toutes les requêtes. Cette hypothèse expliquerait des gels même à charge modérée.</li>
+<li><strong>Accumulation dans Redis et MinIO.</strong> Chaque upload ajoute un job différé dans Redis et un objet dans MinIO, qui tournent sur le même poste que k6 et l'API. Leur volume augmente pendant le soak : à la fin, tests précédents compris, plus de 115 000 jobs différés et ~12 Go d'objets, ce qui pourrait expliquer que les épisodes s'aggravent avec le temps.</li>
+</ol>
+<p><strong>Pour trancher</strong>, relancer un load en observant le serveur :</p>
+<ul>
+<li>lancer l'API avec <code>node --trace-gc</code> (ou mesurer le retard de la boucle d'événements avec <code>perf_hooks.monitorEventLoopDelay</code>) et vérifier si les pauses coïncident avec les gels ;</li>
+<li>suivre <code>docker stats</code> pour MinIO et Redis pendant le test ;</li>
+<li>refaire le test avec une base PostgreSQL locale pour isoler l'effet du réseau.</li>
+</ul>
+<h3 id="recommandations">Recommandations<a class="headerlink" href="#recommandations" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Priorité</th>
+<th>Action</th>
+<th>Effet attendu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Identifier la cause des gels avec les mesures ci-dessus</td>
+<td>Savoir quoi corriger</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Remplacer <code>memoryStorage</code> par un envoi en flux vers MinIO (upload multipart S3 à partir du flux de la requête)</td>
+<td>Mémoire stable quelle que soit la taille des fichiers ; supprime aussi le risque de saturation avec des fichiers de 1 Go</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Refaire le stress et le soak avec des fichiers plus gros (1 à 50 Mo)</td>
+<td>Le test actuel (100 Ko) ne mesure pas l'effet de la taille maximale autorisée (1 Go)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Lancer les tests sur une machine séparée de l'API</td>
+<td>Des mesures qui ne sont pas faussées par le partage du processeur entre k6, l'API, MinIO et Redis</td>
+</tr>
+</tbody>
+</table>
+<h3 id="effet-des-tests-sur-les-donnees">Effet des tests sur les données<a class="headerlink" href="#effet-des-tests-sur-les-donnees" title="Permanent link">&para;</a></h3>
+<p>Les 5 tests ont créé <strong>121 391 fichiers</strong> (environ <strong>12,5 Go</strong> dans MinIO) sur le compte de test, avec expiration à 1 jour : les jobs BullMQ les suppriment automatiquement le lendemain. Pour nettoyer plus tôt, supprimez le compte de test en base (ses fichiers sont supprimés en cascade) et videz le bucket depuis la console MinIO.</p>
+<h2 id="rapports-complets">Rapports complets<a class="headerlink" href="#rapports-complets" title="Permanent link">&para;</a></h2>
+<p>Rapports HTML exportés par le tableau de bord k6, avec toutes les métriques et courbes :</p>
+<ul>
+<li><a href="rapports/k6-smoke.html" target="_blank">Smoke</a></li>
+<li><a href="rapports/k6-load.html" target="_blank">Load</a></li>
+<li><a href="rapports/k6-stress.html" target="_blank">Stress</a></li>
+<li><a href="rapports/k6-soak.html" target="_blank">Soak</a></li>
+<li><a href="rapports/k6-spike.html" target="_blank">Spike</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "toc.follow", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
