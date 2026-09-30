@@ -68,3 +68,45 @@ run = "mkdocs serve"
 [tasks.docs-build]
 description = "Build la doc mkdocs"
 run = "mkdocs build"
+
+[tasks.k6]
+description = "Lance un scénario k6 sur l'upload (smoke, load, stress, soak, spike)"
+usage = '''
+arg "<script>" help="Scénario à lancer" {
+  choices "smoke" "load" "stress" "soak" "spike"
+}
+flag "--host <host>" help="Adresse du back vue depuis le conteneur" default="host.docker.internal"
+'''
+run = '''
+docker run --rm -i \
+  --user "$(id -u):$(id -g)" \
+  --add-host=host.docker.internal:host-gateway \
+  -v "$(pwd)/k6:/scripts" \
+  -e API_HOST="${usage_host}" \
+  grafana/k6 \
+  run "/scripts/${usage_script}.js"
+'''
+
+[tasks.k6-report]
+description = "Lance un scénario k6 et exporte le rapport HTML dans k6/reports"
+usage = '''
+arg "<script>" help="Scénario à lancer" {
+  choices "smoke" "load" "stress" "soak" "spike"
+}
+arg "[name]" help="Nom du rapport (défaut : <script>_<date>)"
+flag "--host <host>" help="Adresse du back vue depuis le conteneur" default="host.docker.internal"
+'''
+run = '''
+name="${usage_name:-${usage_script}_$(date +%Y-%m-%d_%H-%M)}"
+mkdir -p k6/reports
+docker run --rm -i \
+  --user "$(id -u):$(id -g)" \
+  --add-host=host.docker.internal:host-gateway \
+  -v "$(pwd)/k6:/scripts" \
+  -e API_HOST="${usage_host}" \
+  -e K6_WEB_DASHBOARD=true \
+  -e K6_WEB_DASHBOARD_EXPORT="/scripts/reports/report_${name}.html" \
+  grafana/k6 \
+  run "/scripts/${usage_script}.js"
+echo "Rapport : k6/reports/report_${name}.html"
+'''
