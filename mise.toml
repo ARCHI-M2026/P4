@@ -61,13 +61,24 @@ run = [
   "cd frontend && npm run lint",
 ]
 
+[tasks.docs-install]
+description = "Installe MkDocs et Material pour la documentation"
+run = "pip install -r requirements-docs.txt"
+
+[tasks.docs-openapi]
+description = "Régénère openapi.json depuis les décorateurs Nest et le copie dans la doc (Redis requis)"
+run = [
+  "cd backend && npm run docs:openapi",
+  "cp backend/openapi.json docs/backend/openapi.json",
+]
+
 [tasks.docs]
 description = "Sert la doc mkdocs en local"
 run = "mkdocs serve"
 
 [tasks.docs-build]
 description = "Build la doc mkdocs"
-run = "mkdocs build"
+run = "mkdocs build --strict"
 
 [tasks.k6]
 description = "Lance un scénario k6 sur l'upload (smoke, load, stress, soak, spike)"

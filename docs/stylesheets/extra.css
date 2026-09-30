@@ -1,0 +1,23 @@
+/* Swagger UI intégré dans la page API */
+.swagger-frame {
+  width: 100%;
+  height: 80vh;
+  min-height: 600px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 4px;
+  background: #fff;
+}
+
+/* Graphiques de performance : fond clair lisible dans les deux thèmes */
+.perf-chart img {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* Colonnes de chiffres alignées à droite */
+.md-typeset td.num,
+.md-typeset th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

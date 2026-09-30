@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DataShare API – Swagger UI</title>
+  <!-- Swagger UI 5.33.0, copié depuis github.com/swagger-api/swagger-ui (dist/), licence Apache 2.0 -->
+  <link rel="stylesheet" href="swagger-ui/swagger-ui.css">
+  <style>
+    body { margin: 0; background: #fff; }
+    .swagger-ui .topbar { display: none; }
+  </style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="swagger-ui/swagger-ui-bundle.js"></script>
+  <script>
+    // La spec générée par Nest n'a pas de "servers" : on cible l'API locale
+    // pour que le bouton "Try it out" fonctionne pendant le développement.
+    fetch('openapi.json')
+      .then(response => response.json())
+      .then(spec => {
+        if (!spec.servers || spec.servers.length === 0) {
+          spec.servers = [{ url: 'http://localhost:3000', description: 'API locale' }]
+        }
+        SwaggerUIBundle({
+          spec,
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          docExpansion: 'list',
+          defaultModelsExpandDepth: 0,
+          persistAuthorization: true,
+        })
+      })
+      .catch(error => {
+        document.getElementById('swagger-ui').textContent =
+          'Impossible de charger openapi.json : ' + error
+      })
+  </script>
+</body>
+</html>
